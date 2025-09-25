@@ -1,6 +1,6 @@
-package com.sumeru.repository;
+package com.sumeru.appraisal.repository;
 
-import com.sumeru.entity.Employee;
+import com.sumeru.appraisal.entity.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

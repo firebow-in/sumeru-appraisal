@@ -1,7 +1,7 @@
-package com.sumeru.service;
+package com.sumeru.appraisal.service;
 
-import com.sumeru.entity.Employee;
-import com.sumeru.repository.EmployeeRepository;
+import com.sumeru.appraisal.entity.Employee;
+import com.sumeru.appraisal.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

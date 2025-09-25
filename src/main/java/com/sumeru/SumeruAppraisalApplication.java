@@ -21,6 +21,7 @@ public class SumeruAppraisalApplication {
             // Save a new record
         	Employee emp = new Employee();
             emp.setName("Tejas");
+            emp.setEmail("name@sumerudigital.com");
             emp.setRole("Developer");
             repository.save(emp);
 

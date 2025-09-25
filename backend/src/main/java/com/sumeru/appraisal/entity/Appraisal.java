@@ -1,4 +1,4 @@
-package com.sumeru.entity;
+package com.sumeru.appraisal.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
