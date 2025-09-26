@@ -68,3 +68,64 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## Backend Base URL and Environments
+
+Your React app calls the Spring Boot backend via a single base URL. Configure it per environment using `.env` files.
+
+### Option A: .env (Recommended)
+
+Create the file(s) in the `frontend` folder:
+
+**.env** (used by `npm start`)
+```
+REACT_APP_API_BASE=http://localhost:8081/api
+```
+
+**.env.production** (used by `npm run build`)
+```
+REACT_APP_API_BASE=https://api.yourdomain.com/api
+```
+
+In code, the base is read from `process.env.REACT_APP_API_BASE`. The app already uses this in `src/services/api.js`.
+
+Restart the dev server after changing `.env`.
+
+### Option B: package.json proxy (Development only)
+
+Add a proxy to `frontend/package.json` to forward `/api` calls to backend during development:
+```json
+"proxy": "http://localhost:8081"
+```
+Then you can set:
+```
+REACT_APP_API_BASE=/api
+```
+This avoids CORS in dev. Do not rely on `proxy` in production.
+
+## Going Live (Frontend)
+
+1. Ensure backend is reachable at `https://api.yourdomain.com` and exposes `/api/...` endpoints.
+2. Set `REACT_APP_API_BASE` to `https://api.yourdomain.com/api` (via `.env.production` or CI env).
+3. Build and deploy static files:
+```
+npm ci
+npm run build
+# deploy ./build to your hosting or CDN
+```
+
+## Quick Run Commands
+
+Dev:
+```
+cd frontend
+npm install
+npm start
+```
+
+Production build:
+```
+cd frontend
+npm ci
+npm run build
+```
