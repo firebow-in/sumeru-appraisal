@@ -30,9 +30,9 @@ const Dashboard = () => {
         <nav className="navigation">
           {/* Dashboard */}
           <NavLink 
-            to="/" 
-            end
-            className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}
+            to="/dashboard" 
+            className={({ isActive }) => (isActive && !feedbackOpen && !location.pathname.startsWith('/feedback')) ? "nav-item active" : "nav-item"}
+            onClick={() => setFeedbackOpen(false)}
           >
             <div className="nav-icon">⊞</div>
             <span>Dashboard</span>
@@ -41,7 +41,8 @@ const Dashboard = () => {
           {/* Insights */}
           <NavLink 
             to="/insights"
-            className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}
+            className={({ isActive }) => (isActive && !feedbackOpen && !location.pathname.startsWith('/feedback')) ? "nav-item active" : "nav-item"}
+            onClick={() => setFeedbackOpen(false)}
           >
             <div className="nav-icon">📈</div>
             <span>Insights</span>
@@ -50,7 +51,7 @@ const Dashboard = () => {
           {/* Feedback (expandable) */}
           <div
             className={`nav-item ${
-              location.pathname.startsWith('/feedback') ? 'active' : ''
+              (feedbackOpen || location.pathname.startsWith('/feedback')) ? 'active' : ''
             }`}
             onClick={() => setFeedbackOpen(!feedbackOpen)}
           >
@@ -78,7 +79,8 @@ const Dashboard = () => {
           {/* Members */}
           <NavLink 
             to="/members"
-            className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}
+            className={({ isActive }) => (isActive && !feedbackOpen && !location.pathname.startsWith('/feedback')) ? "nav-item active" : "nav-item"}
+            onClick={() => setFeedbackOpen(false)}
           >
             <div className="nav-icon">👥</div>
             <span>Members</span>
@@ -87,7 +89,8 @@ const Dashboard = () => {
           {/* Appraisal */}
           <NavLink 
             to="/appraisal"
-            className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}
+            className={({ isActive }) => (isActive && !feedbackOpen && !location.pathname.startsWith('/feedback')) ? "nav-item active" : "nav-item"}
+            onClick={() => setFeedbackOpen(false)}
           >
             <div className="nav-icon">📄</div>
             <span>Appraisal</span>

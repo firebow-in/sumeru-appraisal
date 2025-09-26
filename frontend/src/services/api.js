@@ -108,6 +108,8 @@ class ApiService {
     }
   }
 
+  
+
   static async searchEmployees(params) {
     try {
       const queryString = new URLSearchParams(params).toString();
@@ -290,6 +292,39 @@ class ApiService {
       return await response.json();
     } catch (error) {
       console.error('Error fetching project analytics:', error);
+      throw error;
+    }
+  }
+
+  // Feedback API endpoints
+  static async getEmployeeFeedback(employeeId) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/employees/${employeeId}/feedback`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error(`Error fetching feedback for employee ${employeeId}:`, error);
+      throw error;
+    }
+  }
+
+  static async addEmployeeFeedback(employeeId, feedbackData) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/employees/${employeeId}/feedback`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(feedbackData),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error(`Error adding feedback for employee ${employeeId}:`, error);
       throw error;
     }
   }

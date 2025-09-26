@@ -1,15 +1,50 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './PageStyles.css';
+import ProfileDropdown from '../components/ProfileDropdown';
 
 const Insights = () => {
+  const [selectedMonth, setSelectedMonth] = useState('January');
+
+  const handleMonthClick = (month) => {
+    setSelectedMonth(month);
+  };
+
+  const getMonthData = (month) => {
+    const monthData = {
+      'January': {
+        title: 'January 2025 Appraisal Review',
+        score: 85,
+        feedback: 'Excellent performance this month. Strong leadership skills demonstrated.',
+        goals: ['Complete project deliverables', 'Improve team collaboration', 'Enhance technical skills'],
+        achievements: ['Led successful project completion', 'Mentored 2 junior developers', 'Achieved 95% client satisfaction']
+      },
+      'February': {
+        title: 'February 2025 Appraisal Review',
+        score: 78,
+        feedback: 'Good progress this month. Continue focusing on communication skills.',
+        goals: ['Improve presentation skills', 'Complete training modules', 'Increase productivity'],
+        achievements: ['Completed advanced training', 'Improved team communication', 'Delivered 3 successful presentations']
+      },
+      'March': {
+        title: 'March 2025 Appraisal Review',
+        score: 92,
+        feedback: 'Outstanding performance! Exceptional work on all fronts.',
+        goals: ['Maintain high performance', 'Take on more responsibilities', 'Mentor new team members'],
+        achievements: ['Exceeded all targets', 'Trained 3 new employees', 'Received client appreciation award']
+      }
+    };
+    return monthData[month] || monthData['January'];
+  };
+
+  const currentData = getMonthData(selectedMonth);
+
   return (
     <div className="insights-page">
       <div className="header">
         <h1 className="title">Your Insights</h1>
         <div className="header-icons">
           <div className="icon bell">🔔</div>
-          <div className="icon"></div>
-        
+          <ProfileDropdown />
         </div>
       </div>
 
@@ -22,7 +57,7 @@ const Insights = () => {
               <h2 className="card-title">My Monthly Appraisal</h2>
               <div className="progress-container">
                 <div className="progress-ring large">
-                  <svg width="200" height="200" viewBox="0 0 140 140">
+                  <svg width="150" height="120" viewBox="0 0 140 140">
                     <circle
                       cx="70"
                       cy="70"
@@ -62,7 +97,7 @@ const Insights = () => {
               <h3 className="metric-title">Punctuality</h3>
               <p className="metric-description">Your punctuality is excellent! Thank you for being a reliable and valuable member of our team.</p>
               <div className="progress-ring small">
-                <svg width="110" height="110" viewBox="0 0 60 60">
+                <svg width="70" height="70" viewBox="0 0 60 60">
                   <circle
                     cx="30"
                     cy="30"
@@ -98,7 +133,7 @@ const Insights = () => {
               <h3 className="metric-title">Teamwork</h3>
               <p className="metric-description">Fantastic teamwork! Your collaborative spirit and positive attitude are a great asset to the team.</p>
               <div className="progress-ring small">
-                <svg width="110" height="110" viewBox="0 0 60 60">
+                <svg width="70" height="70" viewBox="0 0 60 60">
                   <circle
                     cx="30"
                     cy="30"
@@ -134,7 +169,7 @@ const Insights = () => {
               <h3 className="metric-title">Attendance</h3>
               <p className="metric-description">Excellent attendance! Your reliability is highly valued and helps the entire team stay on track.</p>
               <div className="progress-ring small">
-                <svg width="110" height="110" viewBox="0 0 60 60">
+                <svg width="70" height="70" viewBox="0 0 60 60">
                   <circle
                     cx="30"
                     cy="30"
@@ -170,7 +205,7 @@ const Insights = () => {
               <h3 className="metric-title">Task Completion</h3>
               <p className="metric-description">Outstanding work on task completion! Your ability to manage your workload and deliver on time is a great example for the team.</p>
               <div className="progress-ring small">
-                <svg width="110" height="110" viewBox="0 0 60 60">
+                <svg width="70" height="70" viewBox="0 0 60 60">
                   <circle
                     cx="30"
                     cy="30"
@@ -210,13 +245,29 @@ const Insights = () => {
           <div className="review-navigation">
             <button className="nav-arrow">‹</button>
             <div className="review-cards">
-              <div className="review-card active">Appraisal Review January- 2025</div>
-              <div className="review-card">Appraisal Review February- 2025</div>
-              <div className="review-card">Appraisal Review March- 2025</div>
+              <div 
+                className={`review-card ${selectedMonth === 'January' ? 'active' : ''}`}
+                onClick={() => handleMonthClick('January')}
+              >
+                Appraisal Review January- 2025
+              </div>
+              <div 
+                className={`review-card ${selectedMonth === 'February' ? 'active' : ''}`}
+                onClick={() => handleMonthClick('February')}
+              >
+                Appraisal Review February- 2025
+              </div>
+              <div 
+                className={`review-card ${selectedMonth === 'March' ? 'active' : ''}`}
+                onClick={() => handleMonthClick('March')}
+              >
+                Appraisal Review March- 2025
+              </div>
             </div>
             <button className="nav-arrow">›</button>
           </div>
         </div>
+
 
         {/* Bottom Row */}
         <div className="bottom-row">
@@ -234,7 +285,7 @@ const Insights = () => {
                 <div className="engagement-subtitle">Happy Navarathri Guyz....</div>
                 <div className="engagement-date">12 Sep 2025</div>
               </div>
-             
+              
             </div>
           </div>
           
@@ -245,7 +296,7 @@ const Insights = () => {
             <div className="scores-grid">
               <div className="score-card">
                 <div className="score-ring">
-                  <svg width="100" height="100" viewBox="0 0 60 60">
+                  <svg width="70" height="70" viewBox="0 0 60 60">
                     <circle
                       cx="30"
                       cy="30"
@@ -280,7 +331,7 @@ const Insights = () => {
 
               <div className="score-card">
                 <div className="score-ring">
-                  <svg width="140" height="140" viewBox="0 0 60 60">
+                  <svg width="85" height="85" viewBox="0 0 60 60">
                     <circle
                       cx="30"
                       cy="30"
@@ -315,7 +366,7 @@ const Insights = () => {
 
               <div className="score-card">
                 <div className="score-ring">
-                  <svg width="90" height="90" viewBox="0 0 40 40">
+                  <svg width="70" height="70" viewBox="0 0 40 40">
                     <circle
                       cx="20"
                       cy="20"
@@ -348,7 +399,7 @@ const Insights = () => {
                 <div className="score-label">PM Review</div>
                 <div className="score-card">
                 <div className="score-ring">
-                  <svg width="90" height="90" viewBox="0 0 40 40">
+                  <svg width="70" height="70" viewBox="0 0 40 40">
                     <circle
                       cx="20"
                       cy="20"

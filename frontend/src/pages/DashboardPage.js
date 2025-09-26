@@ -2,39 +2,33 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './DashboardPage.css';
 import AppraisalProgress from '../components/AppraisalProgress';
-import ConnectionTest from '../components/ConnectionTest';
-import ApiService from '../services/api';
+import TimeOffPopup from '../components/TimeOffPopup';
+import ProfileDropdown from '../components/ProfileDropdown';
 import { getInsightsAppraisalProgress } from '../utils/insightsData';
+import { 
+  getTotalWorkingDaysInMonth, 
+  getAttendedDaysInCurrentMonth, 
+  getLeaveDaysInCurrentMonth, 
+  getUnscheduledAbsence,
+  getCurrentMonthName,
+  getCurrentYear
+} from '../utils/attendanceUtils';
 
 const DashboardPage = () => {
   const navigate = useNavigate();
-  const [timeOffDays, setTimeOffDays] = useState([]);
-  const [isTimeOffToday, setIsTimeOffToday] = useState(false);
-  const [timeOffMessage, setTimeOffMessage] = useState('');
   const [appraisalProgress, setAppraisalProgress] = useState(71);
-  
-  // Backend integration state
-  const [dashboardStats, setDashboardStats] = useState(null);
-  const [backendConnected, setBackendConnected] = useState(false);
-  const [showConnectionTest, setShowConnectionTest] = useState(false);
+  const [showTimeOffPopup, setShowTimeOffPopup] = useState(false);
+  const [leaveRequests, setLeaveRequests] = useState([]);
+  const [attendanceStats, setAttendanceStats] = useState({
+    totalWorkingDays: 0,
+    attendedDays: 0,
+    unscheduledAbsence: 0
+  });
+  const [profileData, setProfileData] = useState({});
 
   const handleRequestLeave = () => {
     navigate('/request-leave');
   };
-
-  // Load time off days from localStorage on component mount
-  useEffect(() => {
-    const savedTimeOffDays = localStorage.getItem('timeOffDays');
-    if (savedTimeOffDays) {
-      const parsedDays = JSON.parse(savedTimeOffDays);
-      setTimeOffDays(parsedDays);
-      
-      // Check if today is a time off day
-      const today = new Date().toDateString();
-      const isTodayTimeOff = parsedDays.some(day => day.date === today);
-      setIsTimeOffToday(isTodayTimeOff);
-    }
-  }, []);
 
   // Read appraisal progress from Insights page structure
   useEffect(() => {
@@ -43,59 +37,71 @@ const DashboardPage = () => {
     setAppraisalProgress(insightsProgress);
   }, []);
 
-  // Backend integration - fetch dashboard stats
+  // Load leave requests from localStorage
   useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        const stats = await ApiService.getDashboardStats();
-        setDashboardStats(stats);
-        setBackendConnected(true);
-      } catch (error) {
-        console.warn('Backend not available, using mock data:', error);
-        setBackendConnected(false);
-      }
+    const savedRequests = JSON.parse(localStorage.getItem('leaveRequests') || '[]');
+    setLeaveRequests(savedRequests);
+  }, []);
+
+  // Load profile data
+  useEffect(() => {
+    const savedProfile = JSON.parse(localStorage.getItem('employeeProfile') || '{}');
+    setProfileData(savedProfile);
+  }, []);
+
+  // Calculate attendance statistics
+  useEffect(() => {
+    const totalWorkingDays = getTotalWorkingDaysInMonth();
+    const attendedDays = getAttendedDaysInCurrentMonth();
+    const unscheduledAbsence = getUnscheduledAbsence();
+    
+    setAttendanceStats({
+      totalWorkingDays,
+      attendedDays,
+      unscheduledAbsence
+    });
+  }, []);
+
+  // Listen for new leave requests and attendance changes
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const savedRequests = JSON.parse(localStorage.getItem('leaveRequests') || '[]');
+      setLeaveRequests(savedRequests);
+      
+      // Recalculate attendance stats
+      const totalWorkingDays = getTotalWorkingDaysInMonth();
+      const attendedDays = getAttendedDaysInCurrentMonth();
+      const unscheduledAbsence = getUnscheduledAbsence();
+      
+      setAttendanceStats({
+        totalWorkingDays,
+        attendedDays,
+        unscheduledAbsence
+      });
     };
 
-    fetchDashboardData();
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
   // Keep appraisal progress at 71% to match Insights page
   // This should be the same percentage shown in the Insights page
 
   const handleTimeOff = () => {
-    const today = new Date();
-    const todayString = today.toDateString();
-    const timeOffRecord = {
-      date: todayString,
-      timestamp: today.toISOString(),
-      type: 'Time Off',
-      status: 'Active'
-    };
+    setShowTimeOffPopup(true);
+  };
 
-    // Check if today is already marked as time off
-    const isAlreadyTimeOff = timeOffDays.some(day => day.date === todayString);
-    
-    if (isAlreadyTimeOff) {
-      setTimeOffMessage('You have already marked today as Time Off!');
-      setTimeout(() => setTimeOffMessage(''), 3000);
-      return;
-    }
-
-    // Add to time off days
-    const updatedTimeOffDays = [...timeOffDays, timeOffRecord];
-    setTimeOffDays(updatedTimeOffDays);
-    setIsTimeOffToday(true);
-    
-    // Save to localStorage (simulating database)
-    localStorage.setItem('timeOffDays', JSON.stringify(updatedTimeOffDays));
-    
-    setTimeOffMessage('Time Off marked for today! You cannot check in/out today.');
-    setTimeout(() => setTimeOffMessage(''), 3000);
+  const handleCloseTimeOffPopup = () => {
+    setShowTimeOffPopup(false);
+    // Refresh leave requests when popup closes
+    const savedRequests = JSON.parse(localStorage.getItem('leaveRequests') || '[]');
+    setLeaveRequests(savedRequests);
   };
 
   const handleAppraisal = () => {
-    navigate('/appraisal');
+
   };
+
 
   const handleLeaveHistory = () => {
     navigate('/leave-history');
@@ -109,29 +115,41 @@ const DashboardPage = () => {
     <div className="dashboard-page">
       {/* Header */}
       <div className="header">
-        <h1>Good Morning, XYZ!</h1>
+        <h1>Good Morning, {profileData.name || 'XYZ'}</h1>
         <div className="header-actions">
           <div className="notification-icon">🔔</div>
-          <div className="profile-placeholder"></div>
+          <ProfileDropdown />
         </div>
       </div>
 
       {/* Employee Overview and Top Performer */}
       <div className="top-section">
         <div className="employee-overview-card">
-          <div className="employee-photo-placeholder"></div>
+          <div className="employee-photo-placeholder">
+            {profileData.profileImage ? (
+              <img 
+                src={profileData.profileImage} 
+                alt="Profile" 
+                className="employee-profile-image"
+              />
+            ) : (
+              <div className="employee-initial">
+                {profileData.name ? profileData.name.charAt(0) : 'A'}
+              </div>
+            )}
+          </div>
           <div className="employee-stats">
             <div className="stat-item">
-              <span className="stat-label">Total office days</span>
-              <span className="stat-value">26</span>
+              <span className="stat-label">Total office days ({getCurrentMonthName()})</span>
+              <span className="stat-value">{attendanceStats.totalWorkingDays}</span>
             </div>
             <div className="stat-item">
               <span className="stat-label">Attended days</span>
-              <span className="stat-value">21</span>
+              <span className="stat-value">{attendanceStats.attendedDays}</span>
             </div>
             <div className="stat-item">
               <span className="stat-label">Unscheduled Absence</span>
-              <span className="stat-value">05</span>
+              <span className="stat-value">{attendanceStats.unscheduledAbsence}</span>
             </div>
           </div>
         </div>
@@ -152,26 +170,21 @@ const DashboardPage = () => {
       <div className="middle-section">
         <div className="leave-summary-card">
           <h3>Leave Summary</h3>
-          {backendConnected && dashboardStats ? (
-            <div style={{ marginBottom: '10px', fontSize: '12px', color: '#666' }}>
-              📊 Backend Connected - Live Data
-            </div>
-          ) : (
-            <div style={{ marginBottom: '10px', fontSize: '12px', color: '#ff6b6b' }}>
-              ⚠️ Using Mock Data - Backend Not Connected
-            </div>
-          )}
           <div className="leave-types">
             <div className="leave-type">
               <span className="leave-count">05</span>
               <span className="leave-label">Annual Leave</span>
             </div>
             <div className="leave-type">
-              <span className="leave-count">01</span>
+              <span className="leave-count">
+                {leaveRequests.filter(req => req.type === 'sick' && req.status === 'Approved').length}
+              </span>
               <span className="leave-label">Sick Leave</span>
             </div>
             <div className="leave-type">
-              <span className="leave-count">03</span>
+              <span className="leave-count">
+                {leaveRequests.filter(req => req.type === 'casual' && req.status === 'Approved').length}
+              </span>
               <span className="leave-label">Casual Leave</span>
             </div>
             <div className="leave-type">
@@ -182,61 +195,17 @@ const DashboardPage = () => {
           <div className="leave-buttons">
             <button className="leave-btn primary" onClick={handleRequestLeave}>Request Leave</button>
             <button 
-              className={`leave-btn secondary ${isTimeOffToday ? 'time-off-active' : ''}`} 
+              className="leave-btn secondary" 
               onClick={handleTimeOff}
-              disabled={isTimeOffToday}
             >
-              {isTimeOffToday ? 'Time OFF (Active)' : 'Time OFF'}
+              Time OFF
             </button>
           </div>
-          {timeOffMessage && (
-            <div className="time-off-message">
-              {timeOffMessage}
-            </div>
-          )}
         </div>
 
         <div className="appraisal-card" onClick={handleAppraisal} style={{cursor: 'pointer'}}>
           <AppraisalProgress percentage={appraisalProgress} />
         </div>
-      </div>
-
-      {/* Connection Test Section */}
-      {showConnectionTest && <ConnectionTest />}
-      
-      {/* Connection Test Toggle */}
-      <div style={{ 
-        textAlign: 'center', 
-        margin: '20px 0',
-        padding: '10px',
-        backgroundColor: '#f8f9fa',
-        borderRadius: '8px'
-      }}>
-        <button 
-          onClick={() => setShowConnectionTest(!showConnectionTest)}
-          style={{
-            padding: '8px 16px',
-            backgroundColor: showConnectionTest ? '#dc3545' : '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontSize: '14px'
-          }}
-        >
-          {showConnectionTest ? '🔒 Hide Connection Test' : '🔗 Test Backend Connection'}
-        </button>
-        
-        {backendConnected && (
-          <div style={{ 
-            marginTop: '10px', 
-            color: '#28a745', 
-            fontSize: '14px',
-            fontWeight: 'bold'
-          }}>
-            ✅ Backend Connected Successfully!
-          </div>
-        )}
       </div>
 
       {/* Bottom Section */}
@@ -293,6 +262,11 @@ const DashboardPage = () => {
           </div>
         </div>
       </div>
+      
+      <TimeOffPopup 
+        isOpen={showTimeOffPopup} 
+        onClose={handleCloseTimeOffPopup} 
+      />
     </div>
   );
 };

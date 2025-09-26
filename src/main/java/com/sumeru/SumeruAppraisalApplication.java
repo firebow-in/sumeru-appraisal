@@ -18,14 +18,14 @@ public class SumeruAppraisalApplication {
     @Bean
     public org.springframework.boot.CommandLineRunner demo(EmployeeRepository repository) {
         return args -> {
-            // Save a new record
-        	Employee emp = new Employee();
-            emp.setName("Tejas");
-            emp.setEmail("name@sumerudigital.com");
-            emp.setRole("Developer");
-            repository.save(emp);
-
-            // Fetch and print all records
+            String email = "name@sumerudigital.com";
+            if (!repository.existsByEmail(email)) {
+                Employee emp = new Employee();
+                emp.setName("Tejas");
+                emp.setEmail(email);
+                emp.setRole("Developer");
+                repository.save(emp);
+            }
             repository.findAll().forEach(System.out::println);
         };
     }

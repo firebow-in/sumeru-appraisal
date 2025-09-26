@@ -11,15 +11,18 @@ public class Appraisal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long employeeId;        // Employee reference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employee_id")
+    private Employee employee;      // Employee relationship
+
     private String status;          // e.g., "Pending", "Completed"
     private String comments;
     private LocalDate appraisalDate;
 
     public Appraisal() {}
 
-    public Appraisal(Long employeeId, String status, String comments, LocalDate appraisalDate) {
-        this.employeeId = employeeId;
+    public Appraisal(Employee employee, String status, String comments, LocalDate appraisalDate) {
+        this.employee = employee;
         this.status = status;
         this.comments = comments;
         this.appraisalDate = appraisalDate;
@@ -28,8 +31,8 @@ public class Appraisal {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public Long getEmployeeId() { return employeeId; }
-    public void setEmployeeId(Long employeeId) { this.employeeId = employeeId; }
+    public Employee getEmployee() { return employee; }
+    public void setEmployee(Employee employee) { this.employee = employee; }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }

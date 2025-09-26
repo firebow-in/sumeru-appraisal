@@ -28,6 +28,11 @@ public class Employee {
 
     private boolean active;
 
+    // Manager relationship
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "manager_id")
+    private Employee manager;
+
     // Constructors
     public Employee() {}
 
@@ -42,6 +47,21 @@ public class Employee {
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.active = active;
+    }
+
+    // Constructor with manager
+    public Employee(String name, String email, String role, String department, String position,
+                    LocalDate hireDate, String phoneNumber, String address, boolean active, Employee manager) {
+        this.name = name;
+        this.email = email;
+        this.role = role;
+        this.department = department;
+        this.position = position;
+        this.hireDate = hireDate;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.active = active;
+        this.manager = manager;
     }
 
     // Getters & Setters
@@ -74,4 +94,7 @@ public class Employee {
 
     public boolean isActive() { return active; }
     public void setActive(boolean active) { this.active = active; }
+
+    public Employee getManager() { return manager; }
+    public void setManager(Employee manager) { this.manager = manager; }
 }
