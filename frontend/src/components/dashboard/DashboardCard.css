@@ -1,0 +1,183 @@
+/* Dashboard Card Base Styles */
+.dashboard-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f3f4;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.dashboard-card.clickable {
+  cursor: pointer;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0a3578;
+  margin: 0 0 16px 0;
+  line-height: 20px;
+}
+
+.card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Card Sizes */
+.card-size-small {
+  min-height: 120px;
+  padding: 16px;
+}
+
+.card-size-medium {
+  min-height: 140px;
+  padding: 24px;
+}
+
+.card-size-large {
+  min-height: 200px;
+  padding: 32px;
+}
+
+.card-size-full {
+  min-height: 300px;
+  padding: 32px;
+}
+
+/* Card Variants */
+.card-variant-default {
+  background: white;
+  border: 1px solid #f1f3f4;
+}
+
+.card-variant-primary {
+  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+  color: white;
+  border: none;
+}
+
+.card-variant-primary .card-title {
+  color: white;
+}
+
+.card-variant-secondary {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+}
+
+.card-variant-accent {
+  background: linear-gradient(135deg, #ffbc13 0%, #e6a70f 100%);
+  color: #0a3578;
+  border: none;
+}
+
+.card-variant-accent .card-title {
+  color: #0a3578;
+}
+
+/* Responsive Grid System */
+.dashboard-grid {
+  display: grid;
+  gap: 16px;
+  width: 100%;
+}
+
+/* Grid Templates */
+.grid-2-columns {
+  grid-template-columns: 1fr 1fr;
+}
+
+.grid-3-columns {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.grid-4-columns {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.grid-auto-fit {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1200px) {
+  .grid-4-columns {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .grid-3-columns,
+  .grid-4-columns {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .grid-2-columns,
+  .grid-3-columns,
+  .grid-4-columns {
+    grid-template-columns: 1fr;
+  }
+  
+  .dashboard-card {
+    padding: 16px;
+  }
+  
+  .card-size-large,
+  .card-size-full {
+    min-height: 160px;
+    padding: 20px;
+  }
+}
+
+/* Special Layout Classes */
+.card-span-2 {
+  grid-column: span 2;
+}
+
+.card-span-3 {
+  grid-column: span 3;
+}
+
+.card-span-full {
+  grid-column: 1 / -1;
+}
+
+/* Card Content Layouts */
+.card-content-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.card-content-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.card-content-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card-content-space-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

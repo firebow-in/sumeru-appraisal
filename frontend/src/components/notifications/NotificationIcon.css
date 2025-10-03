@@ -1,0 +1,46 @@
+/* ===========================================
+   NOTIFICATION ICON STYLES
+   =========================================== */
+
+.notification-icon {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-notification-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.notification-icon:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  background-color: #f59e0b;
+}
+
+.bell-icon {
+  font-size: var(--text-2xl);
+  color: var(--color-text-white);
+}
+
+.notification-badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: var(--color-notification-badge);
+  color: var(--color-text-white);
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+  border-radius: var(--radius-full);
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-text-white);
+  box-shadow: var(--shadow-sm);
+}

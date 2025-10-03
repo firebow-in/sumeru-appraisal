@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figma Exact Navigation - Sumeru Dashboard</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f5f3;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Dashboard Layout - Exact Figma Grid */
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: 198px 1fr; /* Exact Figma sidebar width */
+            min-height: 100vh;
+            background-color: #f4f5f3;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            gap: 0; /* No gap between sidebar and content */
+        }
+
+        /* Figma Design Sidebar - Exact Specifications */
+        .sidebar {
+            position: sticky;
+            top: 0;
+            width: 198px; /* Exact Figma width */
+            height: 100vh;
+            background-color: #ffffff;
+            padding: 0; /* Remove default padding, use specific spacing */
+            box-shadow: none; /* Remove default shadow */
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        /* Custom scrollbar for sidebar */
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 2px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 45px 0 35px 0; /* Top: 45px from Figma, Bottom: calculated spacing */
+            padding: 0;
+        }
+
+        .logo-image {
+            width: 175px; /* Exact Figma width */
+            height: 124px; /* Exact Figma height */
+            object-fit: contain;
+            border-radius: 34px; /* Exact Figma corner radius */
+            box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25); /* Exact Figma shadow */
+            background: linear-gradient(45deg, #ffbd11, #f59e0b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0a3578;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .navigation {
+            display: flex;
+            flex-direction: column;
+            gap: 18px; /* Spacing between nav items from Figma */
+            flex: 1;
+            padding: 0;
+        }
+
+        /* Figma Navigation Items - Exact Specifications */
+        .nav-item {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0;
+            border-radius: 12px; /* Exact Figma corner radius */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #0a3578; /* Exact Figma color: rgb(10, 53, 120) */
+            text-decoration: none;
+            background-color: #f4f3f3; /* Exact Figma color: rgb(244, 243, 243) */
+            border: none;
+            width: 198px; /* Exact Figma width */
+            height: 50px; /* Exact Figma height */
+            text-align: left;
+            font-size: 16px;
+            font-weight: 500;
+            box-sizing: border-box;
+            position: relative;
+            margin: 0;
+            box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25); /* Exact Figma shadow */
+        }
+
+        .nav-item:hover {
+            background-color: #e8e7e7;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-item.active {
+            background-color: #f4f3f3 !important; /* Keep same background as normal state */
+            color: #0a3578 !important;
+            font-weight: 600;
+            box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+        }
+
+        .nav-icon {
+            margin-left: 16px; /* Left padding from Figma: 48px - 32px = 16px */
+            margin-right: 10px; /* Space between icon and text from Figma */
+            width: 26px; /* Exact Figma icon width */
+            height: 26px; /* Exact Figma icon height */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0a3578; /* Same as text color */
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            font-size: 20px;
+        }
+
+        .nav-icon svg {
+            width: 100%;
+            height: 100%;
+            color: inherit;
+        }
+
+        /* Figma Feedback Section */
+        .feedback-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            width: 198px;
+        }
+
+        .feedback-main {
+            background-color: #ffbd11 !important; /* Exact Figma yellow: rgb(255, 189, 17) */
+            color: #0a3578 !important; /* Same blue text as other items */
+            font-weight: 500;
+            box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25) !important;
+            width: 198px;
+            height: 50px;
+        }
+
+        .feedback-main:hover {
+            background-color: #e6a70f !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .feedback-submenu {
+            margin-top: 0; /* No gap, items are directly stacked */
+            padding-left: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0; /* No gap between sub-items */
+        }
+
+        .nav-subitem {
+            display: flex;
+            align-items: center;
+            padding: 0;
+            border-radius: 0; /* No border radius for sub-items */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #0a3578; /* Same blue as main items */
+            text-decoration: none;
+            background-color: #f4f3f3; /* Same background as main items */
+            border: none;
+            width: 198px; /* Same width as main items */
+            height: 40px; /* Exact Figma height */
+            text-align: left;
+            font-size: 14px; /* Slightly smaller than main items */
+            font-weight: 500;
+            box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25); /* Same shadow as main items */
+            box-sizing: border-box;
+            margin: 0;
+        }
+
+        .nav-subitem:hover {
+            background-color: #e8e7e7;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-subitem.active {
+            background-color: #f4f3f3 !important;
+            color: #0a3578 !important;
+            font-weight: 600;
+        }
+
+        .nav-subitem .nav-icon {
+            margin-left: 14px; /* Left padding for sub-items */
+            margin-right: 10px; /* Space between icon and text */
+            width: 22px; /* Exact Figma icon width for sub-items */
+            height: 20px; /* Exact Figma icon height for sub-items */
+            font-size: 16px;
+        }
+
+        /* Main Content - Grid Item Flush with Sidebar */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f4f5f3;
+            overflow-x: hidden;
+            overflow-y: auto;
+            box-sizing: border-box;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .dashboard-frame {
+            width: 100%;
+            margin: 0;
+            padding: 16px; /* Minimal spacing as per design */
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px; /* Consistent 16px spacing */
+            box-sizing: border-box;
+        }
+
+        /* Header Section */
+        .dashboard-header {
+            background: white;
+            border-radius: 16px;
+            padding: 20px 32px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 80px;
+            box-sizing: border-box;
+            border: 1px solid #f1f3f4;
+        }
+
+        .greeting-text {
+            font-size: 24px;
+            font-weight: 600;
+            color: #0a3578;
+            margin: 0;
+            line-height: 32px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .notification-badge {
+            width: 44px;
+            height: 44px;
+            background: #0a3578;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(10, 53, 120, 0.3);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            font-size: 18px;
+            color: white;
+        }
+
+        .notification-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(10, 53, 120, 0.4);
+        }
+
+        .profile-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: #f8f9fa;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            font-size: 20px;
+            color: #0a3578;
+        }
+
+        .profile-avatar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Demo Content */
+        .demo-content {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f1f3f4;
+        }
+
+        .demo-content h3 {
+            color: #0a3578;
+            margin-bottom: 16px;
+            font-size: 18px;
+        }
+
+        .demo-content p {
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .spec-list {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+
+        .spec-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .spec-list li {
+            padding: 4px 0;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .spec-list li strong {
+            color: #0a3578;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Figma Exact Navigation Sidebar -->
+        <div class="sidebar">
+            <div class="logo-section">
+                <div class="logo-image">
+                    SUMERU
+                </div>
+            </div>
+            
+            <div class="navigation">
+                <!-- Dashboard - First nav item -->
+                <a href="#" class="nav-item active">
+                    <div class="nav-icon">📊</div>
+                    <span>Dashboard</span>
+                </a>
+                
+                <!-- Insights - Second nav item -->
+                <a href="#" class="nav-item">
+                    <div class="nav-icon">📈</div>
+                    <span>Insights</span>
+                </a>
+                
+                <!-- Feedback Section - Yellow background with sub-items -->
+                <div class="feedback-section">
+                    <a href="#" class="nav-item feedback-main">
+                        <div class="nav-icon">💬</div>
+                        <span>Feedback</span>
+                    </a>
+                    
+                    <div class="feedback-submenu">
+                        <a href="#" class="nav-subitem">
+                            <div class="nav-icon">📤</div>
+                            <span>Send Feedback</span>
+                        </a>
+                        <a href="#" class="nav-subitem">
+                            <div class="nav-icon">📥</div>
+                            <span>Receive Feedback</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Members - Fourth nav item -->
+                <a href="#" class="nav-item">
+                    <div class="nav-icon">👥</div>
+                    <span>Members</span>
+                </a>
+                
+                <!-- Appraisal - Fifth nav item -->
+                <a href="#" class="nav-item">
+                    <div class="nav-icon">📋</div>
+                    <span>Appraisal</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="dashboard-frame">
+                <!-- Header -->
+                <div class="dashboard-header">
+                    <h1 class="greeting-text">Good Morning, XYZ!</h1>
+                    <div class="header-actions">
+                        <div class="notification-badge">
+                            🔔
+                        </div>
+                        <div class="profile-avatar">
+                            👤
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Demo Content -->
+                <div class="demo-content">
+                    <h3>✅ Figma Design Specifications Implemented</h3>
+                    <p>This navigation bar has been recreated with pixel-perfect accuracy based on your Figma design JSON.</p>
+                    
+                    <div class="spec-list">
+                        <h4>Exact Measurements Applied:</h4>
+                        <ul>
+                            <li><strong>Sidebar Width:</strong> 198px (exact Figma specification)</li>
+                            <li><strong>Navigation Item Height:</strong> 50px (main items) / 40px (sub-items)</li>
+                            <li><strong>Logo Dimensions:</strong> 175px × 124px with 34px border radius</li>
+                            <li><strong>Icon Sizes:</strong> 26px × 26px (main) / 22px × 20px (sub-items)</li>
+                            <li><strong>Spacing:</strong> 18px gap between navigation items</li>
+                            <li><strong>Colors:</strong> #0a3578 (text), #f4f3f3 (background), #ffbd11 (feedback)</li>
+                            <li><strong>Shadows:</strong> 0 4px 4px rgba(0,0,0,0.25) on all items</li>
+                            <li><strong>Corner Radius:</strong> 12px on navigation items</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="demo-content">
+                    <h3>🎯 Key Features Matching Figma Design</h3>
+                    <p><strong>✅ Exact Layout:</strong> 198px sidebar width with flush main content</p>
+                    <p><strong>✅ Precise Spacing:</strong> Logo positioned at 45px from top, 35px margin bottom</p>
+                    <p><strong>✅ Color Accuracy:</strong> RGB(10, 53, 120) blue text, RGB(244, 243, 243) backgrounds</p>
+                    <p><strong>✅ Shadow Effects:</strong> Consistent 4px drop shadows with 25% opacity</p>
+                    <p><strong>✅ Feedback Section:</strong> Yellow background (#ffbd11) with stacked sub-items</p>
+                    <p><strong>✅ Icon Positioning:</strong> 16px left margin, 10px right margin for perfect alignment</p>
+                </div>
+
+                <div class="demo-content">
+                    <h3>🔍 Interactive Elements</h3>
+                    <p>Hover over navigation items to see the exact hover effects:</p>
+                    <p>• Background changes to #e8e7e7</p>
+                    <p>• Transform: translateY(-2px) for subtle lift</p>
+                    <p>• Enhanced shadow: 0 6px 8px rgba(0,0,0,0.3)</p>
+                    <p>• Smooth 0.3s ease transitions</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

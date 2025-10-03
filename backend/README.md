@@ -13,19 +13,6 @@ A comprehensive HRMS backend supporting employees, feedback, appraisals, and pro
 
 The backend comes pre-loaded with **real organizational hierarchy**:
 
-### 🏢 Organizational Structure
-```
-Abhijeet Ranadhir (CEO)
-├── Niharika (IT Manager)
-│   ├── Hanumesh (Software Engineer)
-│   ├── Basavaraj (Software Engineer)
-│   ├── Karan (Software Engineer)
-│   ├── Bharat (Software Engineer)
-│   ├── Alvita (Software Engineer)
-│   ├── Amarjeet (Software Engineer)
-│   └── Ananya (Software Engineer)
-└── Kiran (HR Manager)
-```
 
 ### 📈 Data Summary
 - **10 Employees** with realistic roles and hierarchy
@@ -81,6 +68,17 @@ Abhijeet Ranadhir (CEO)
 1. **Start Backend:** `cd backend && mvn spring-boot:run`
 2. **Start Frontend:** `cd frontend && npm start`
 3. **Test Connection:** The frontend's ConnectionTest component will verify the API
+
+### Frontend .env quick setup (recommended)
+Create a file `frontend/.env` and add:
+```
+REACT_APP_API_BASE=http://localhost:8081/api
+```
+For production builds (`npm run build`), set `frontend/.env.production`:
+```
+REACT_APP_API_BASE=https://api.yourdomain.com/api
+```
+Restart the dev server after changing `.env`.
 
 ## 🏭 Production Setup (MySQL)
 

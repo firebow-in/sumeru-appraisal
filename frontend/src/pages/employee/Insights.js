@@ -1,0 +1,445 @@
+import React, { useState } from 'react';
+import './PageStyles.css';
+import ProfileDropdown from '../../components/ProfileDropdown';
+
+const Insights = () => {
+  const [selectedMonth, setSelectedMonth] = useState('January');
+
+  const handleMonthClick = (month) => {
+    setSelectedMonth(month);
+  };
+
+  const getMonthData = (month) => {
+    const monthData = {
+      'January': {
+        title: 'January 2025 Appraisal Review',
+        score: 85,
+        feedback: 'Excellent performance this month. Strong leadership skills demonstrated.',
+        goals: ['Complete project deliverables', 'Improve team collaboration', 'Enhance technical skills'],
+        achievements: ['Led successful project completion', 'Mentored 2 junior developers', 'Achieved 95% client satisfaction']
+      },
+      'February': {
+        title: 'February 2025 Appraisal Review',
+        score: 78,
+        feedback: 'Good progress this month. Continue focusing on communication skills.',
+        goals: ['Improve presentation skills', 'Complete training modules', 'Increase productivity'],
+        achievements: ['Completed advanced training', 'Improved team communication', 'Delivered 3 successful presentations']
+      },
+      'March': {
+        title: 'March 2025 Appraisal Review',
+        score: 92,
+        feedback: 'Outstanding performance! Exceptional work on all fronts.',
+        goals: ['Maintain high performance', 'Take on more responsibilities', 'Mentor new team members'],
+        achievements: ['Exceeded all targets', 'Trained 3 new employees', 'Received client appreciation award']
+      }
+    };
+    return monthData[month] || monthData['January'];
+  };
+
+  const currentData = getMonthData(selectedMonth);
+
+  return (
+    <div className="insights-page">
+      <div className="header">
+        <h1 className="title">Your Insights</h1>
+        <div className="header-icons">
+          <div className="icon bell">🔔</div>
+          <ProfileDropdown />
+        </div>
+      </div>
+
+      <div className="content">
+        {/* Top Row */}
+        <div className="top-row">
+          {/* Left Column - My Monthly Appraisal */}
+          <div className="left-column">
+            <div className="appraisal-card">
+              <h2 className="card-title">My Monthly Appraisal</h2>
+              <div className="progress-container">
+                <div className="progress-ring large">
+                  <svg width="150" height="120" viewBox="0 0 140 140">
+                    <circle
+                      cx="70"
+                      cy="70"
+                      r="60"
+                      fill="none"
+                      stroke="#e5e7eb"
+                      strokeWidth="8"
+                    />
+                    <circle
+                      cx="70"
+                      cy="70"
+                      r="60"
+                      fill="none"
+                      stroke="url(#gradient1)"
+                      strokeWidth="8"
+                      strokeLinecap="round"
+                      strokeDasharray="377"
+                      strokeDashoffset="109"
+                      transform="rotate(-90 70 70)"
+                    />
+                    <defs>
+                      <linearGradient id="gradient1" x1="20%" y1="0%" x2="80%" y2="0%">
+                        <stop offset="0%" stopColor="#ffd700" />
+                        <stop offset="100%" stopColor="#4a90e2" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <div className="progress-text">71%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column - Performance Metrics */}
+          <div className="right-column">
+            <div className="metric-card">
+              <h3 className="metric-title">Punctuality</h3>
+              <p className="metric-description">Your punctuality is excellent! Thank you for being a reliable and valuable member of our team.</p>
+              <div className="progress-ring small">
+                <svg width="70" height="70" viewBox="0 0 60 60">
+                  <circle
+                    cx="30"
+                    cy="30"
+                    r="24"
+                    fill="none"
+                    stroke="#e5e7eb"
+                    strokeWidth="5"
+                  />
+                  <circle
+                    cx="30"
+                    cy="30"
+                    r="24"
+                    fill="none"
+                    stroke="url(#gradient2)"
+                    strokeWidth="5"
+                    strokeLinecap="round"
+                    strokeDasharray="151"
+                    strokeDashoffset="38"
+                    transform="rotate(-90 30 30)"
+                  />
+                  <defs>
+                    <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#ffd700" />
+                      <stop offset="100%" stopColor="#4a90e2" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div className="progress-text">75%</div>
+              </div>
+            </div>
+
+            <div className="metric-card">
+              <h3 className="metric-title">Teamwork</h3>
+              <p className="metric-description">Fantastic teamwork! Your collaborative spirit and positive attitude are a great asset to the team.</p>
+              <div className="progress-ring small">
+                <svg width="70" height="70" viewBox="0 0 60 60">
+                  <circle
+                    cx="30"
+                    cy="30"
+                    r="24"
+                    fill="none"
+                    stroke="#e5e7eb"
+                    strokeWidth="5"
+                  />
+                  <circle
+                    cx="30"
+                    cy="30"
+                    r="24"
+                    fill="none"
+                    stroke="url(#gradient3)"
+                    strokeWidth="5"
+                    strokeLinecap="round"
+                    strokeDasharray="151"
+                    strokeDashoffset="38"
+                    transform="rotate(-90 30 30)"
+                  />
+                  <defs>
+                    <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#ffd700" />
+                      <stop offset="100%" stopColor="#4a90e2" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div className="progress-text">75%</div>
+              </div>
+            </div>
+
+            <div className="metric-card">
+              <h3 className="metric-title">Attendance</h3>
+              <p className="metric-description">Excellent attendance! Your reliability is highly valued and helps the entire team stay on track.</p>
+              <div className="progress-ring small">
+                <svg width="70" height="70" viewBox="0 0 60 60">
+                  <circle
+                    cx="30"
+                    cy="30"
+                    r="24"
+                    fill="none"
+                    stroke="#e5e7eb"
+                    strokeWidth="5"
+                  />
+                  <circle
+                    cx="30"
+                    cy="30"
+                    r="24"
+                    fill="none"
+                    stroke="url(#gradient4)"
+                    strokeWidth="5"
+                    strokeLinecap="round"
+                    strokeDasharray="151"
+                    strokeDashoffset="60"
+                    transform="rotate(-90 30 30)"
+                  />
+                  <defs>
+                    <linearGradient id="gradient4" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#ffd700" />
+                      <stop offset="100%" stopColor="#4a90e2" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div className="progress-text">60%</div>
+              </div>
+            </div>
+
+            <div className="metric-card">
+              <h3 className="metric-title">Task Completion</h3>
+              <p className="metric-description">Outstanding work on task completion! Your ability to manage your workload and deliver on time is a great example for the team.</p>
+              <div className="progress-ring small">
+                <svg width="70" height="70" viewBox="0 0 60 60">
+                  <circle
+                    cx="30"
+                    cy="30"
+                    r="24"
+                    fill="none"
+                    stroke="#e5e7eb"
+                    strokeWidth="5"
+                  />
+                  <circle
+                    cx="30"
+                    cy="30"
+                    r="24"
+                    fill="none"
+                    stroke="url(#gradient5)"
+                    strokeWidth="5"
+                    strokeLinecap="round"
+                    strokeDasharray="151"
+                    strokeDashoffset="38"
+                    transform="rotate(-90 30 30)"
+                  />
+                  <defs>
+                    <linearGradient id="gradient5" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#ffd700" />
+                      <stop offset="100%" stopColor="#4a90e2" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div className="progress-text">75%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Appraisal Review Section */}
+        <div className="appraisal-review">
+          <h3 className="section-title">Appraisal Review</h3>
+          <div className="review-navigation">
+            <button className="nav-arrow">‹</button>
+            <div className="review-cards">
+              <div 
+                className={`review-card ${selectedMonth === 'January' ? 'active' : ''}`}
+                onClick={() => handleMonthClick('January')}
+              >
+                Appraisal Review January- 2025
+              </div>
+              <div 
+                className={`review-card ${selectedMonth === 'February' ? 'active' : ''}`}
+                onClick={() => handleMonthClick('February')}
+              >
+                Appraisal Review February- 2025
+              </div>
+              <div 
+                className={`review-card ${selectedMonth === 'March' ? 'active' : ''}`}
+                onClick={() => handleMonthClick('March')}
+              >
+                Appraisal Review March- 2025
+              </div>
+            </div>
+            <button className="nav-arrow">›</button>
+          </div>
+        </div>
+
+
+        {/* Bottom Row */}
+        <div className="bottom-row">
+          {/* Engagements */}
+          <div className="engagements">
+            <h3 className="section-title">Engagements</h3>
+            <div className="engagement-list">
+              <div className="engagement-item">
+                <div className="engagement-title">You Wished Happy Birthday</div>
+                <div className="engagement-subtitle">Happy Birthday XYZ</div>
+                <div className="engagement-date">12 Sep 2025</div>
+              </div>
+              <div className="engagement-item">
+                <div className="engagement-title">You Wished Happy Navaratri</div>
+                <div className="engagement-subtitle">Happy Navarathri Guyz....</div>
+                <div className="engagement-date">12 Sep 2025</div>
+              </div>
+              
+            </div>
+          </div>
+          
+
+          {/* Review Scores */}
+          <div className="review-scores">
+            <h3 className="section-title">Review</h3>
+            <div className="scores-grid">
+              <div className="score-card">
+                <div className="score-ring">
+                  <svg width="70" height="70" viewBox="0 0 60 60">
+                    <circle
+                      cx="30"
+                      cy="30"
+                      r="24"
+                      fill="none"
+                      stroke="#e5e7eb"
+                      strokeWidth="5"
+                    />
+                    <circle
+                      cx="30"
+                      cy="30"
+                      r="24"
+                      fill="none"
+                      stroke="url(#gradient6)"
+                      strokeWidth="5"
+                      strokeLinecap="round"
+                      strokeDasharray="151"
+                      strokeDashoffset="38"
+                      transform="rotate(-90 30 30)"
+                    />
+                    <defs>
+                      <linearGradient id="gradient6" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#ffd700" />
+                        <stop offset="100%" stopColor="#4a90e2" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <div className="score-text">4</div>
+                </div>
+                <div className="score-label">Self Review</div>
+              </div>
+
+              <div className="score-card">
+                <div className="score-ring">
+                  <svg width="85" height="85" viewBox="0 0 60 60">
+                    <circle
+                      cx="30"
+                      cy="30"
+                      r="24"
+                      fill="none"
+                      stroke="#e5e7eb"
+                      strokeWidth="5"
+                    />
+                    <circle
+                      cx="30"
+                      cy="30"
+                      r="24"
+                      fill="none"
+                      stroke="url(#gradient7)"
+                      strokeWidth="5"
+                      strokeLinecap="round"
+                      strokeDasharray="151"
+                      strokeDashoffset="60"
+                      transform="rotate(-90 30 30)"
+                    />
+                    <defs>
+                      <linearGradient id="gradient7" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#ffd700" />
+                        <stop offset="100%" stopColor="#4a90e2" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <div className="score-text">3</div>
+                </div>
+                <div className="score-label">Avg Review</div>
+              </div>
+
+              <div className="score-card">
+                <div className="score-ring">
+                  <svg width="70" height="70" viewBox="0 0 40 40">
+                    <circle
+                      cx="20"
+                      cy="20"
+                      r="16"
+                      fill="none"
+                      stroke="#e5e7eb"
+                      strokeWidth="3"
+                    />
+                    <circle
+                      cx="20"
+                      cy="20"
+                      r="16"
+                      fill="none"
+                      stroke="url(#gradient8)"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeDasharray="100"
+                      strokeDashoffset="40"
+                      transform="rotate(-90 20 20)"
+                    />
+                    <defs>
+                      <linearGradient id="gradient8" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#ffd700" />
+                        <stop offset="100%" stopColor="#4a90e2" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <div className="score-text">3</div>
+                </div>
+                <div className="score-label">PM Review</div>
+                <div className="score-card">
+                <div className="score-ring">
+                  <svg width="70" height="70" viewBox="0 0 40 40">
+                    <circle
+                      cx="20"
+                      cy="20"
+                      r="16"
+                      fill="none"
+                      stroke="#e5e7eb"
+                      strokeWidth="3"
+                    />
+                    <circle
+                      cx="20"
+                      cy="20"
+                      r="16"
+                      fill="none"
+                      stroke="url(#gradient9)"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeDasharray="100"
+                      strokeDashoffset="60"
+                      transform="rotate(-90 20 20)"
+                    />
+                    <defs>
+                      <linearGradient id="gradient9" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#ffd700" />
+                        <stop offset="100%" stopColor="#4a90e2" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <div className="score-text">2</div>
+                </div>
+                <div className="score-label">CEO Review</div>
+              </div>
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Insights;

@@ -10,7 +10,7 @@ const AppraisalProgress = ({ percentage = 71 }) => {
     <div className="appraisal-progress-container">
       <div className="appraisal-progress-title">Appraisal of this Month</div>
       <div className="progress-circle-wrapper">
-        <svg width="200" height="200" viewBox="0 0 140 140">
+        <svg width="180" height="180" viewBox="0 0 140 140">
           {/* Background circle */}
           <circle
             cx="70"

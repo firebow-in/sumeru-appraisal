@@ -1,0 +1,123 @@
+.sidebar-root {
+  width: 250px;
+  height: 100vh;
+  background: white;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 18px;
+  box-sizing: border-box;
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.sidebar-logo {
+  margin-bottom: 18px;
+  display: flex;
+  justify-content: center;
+}
+
+.logo-img {
+  width: 100px;
+  height: auto;
+  margin-bottom: 12px;
+}
+
+.sidebar-menu {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sidebar-btn, .sidebar-sub-btn {
+  width: 90%;
+  background: #f7f8fa;
+  color: #0a3578;
+  font-weight: 600;
+  font-size: 20px;
+  border: none;
+  padding: 13px 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 3px rgba(50,80,130,0.06);
+  margin: 0 auto;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.sidebar-btn.active {
+  background: #ffbc13;
+  color: #0a3578;
+  box-shadow: 0 4px 8px rgba(255,188,19,0.18);
+}
+
+.sidebar-btn .sidebar-icon,
+.sidebar-sub-btn .sidebar-icon {
+  font-size: 22px;
+  margin-right: 14px;
+}
+
+.sidebar-submenu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+  padding-left: 24px;
+}
+
+.sidebar-sub-btn {
+  width: 86%;
+  background: #fff;
+  font-size: 16px;
+  color: #0a3578;
+  font-weight: 500;
+  border-radius: 9px;
+  margin: 0 auto;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  box-shadow: none;
+}
+
+.sidebar-sub-btn.active {
+  background: #e0efff;
+  color: #0a3578;
+}
+
+.sidebar-btn:focus, .sidebar-sub-btn:focus {
+  outline: 2px solid #0a3578;
+}
+
+/* For better spacing below */
+.sidebar-menu > *:last-child {
+  margin-bottom: 10px;
+}
+
+/* Hover effects */
+.sidebar-btn:hover:not(.active) {
+  background: #eef2f5;
+  transform: translateY(-1px);
+}
+
+.sidebar-sub-btn:hover:not(.active) {
+  background: #f5f7fa;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .sidebar-root {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  
+  .sidebar-root.mobile-open {
+    transform: translateX(0);
+  }
+}
+
