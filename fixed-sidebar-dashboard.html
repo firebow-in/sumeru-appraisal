@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixed Sidebar Dashboard - No Overlap</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f5f3;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Dashboard Layout - Flexbox with Fixed Sidebar */
+        .dashboard-layout {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f4f5f3;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        /* Sidebar - Fixed Position */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 220px;
+            height: 100vh;
+            background-color: #ffffff;
+            padding: 24px 20px;
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            overflow-y: auto;
+            border-right: 1px solid #e5e7eb;
+            box-sizing: border-box;
+        }
+
+        /* Custom scrollbar for sidebar */
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 2px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 32px;
+            padding: 0;
+        }
+
+        .logo-image {
+            max-height: 80px;
+            max-width: 120px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(45deg, #ffbc13, #feb910);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0a3578;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 20px;
+        }
+
+        .navigation {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #0a3578;
+            text-decoration: none;
+            background-color: #f8f9fa;
+            border: none;
+            width: 100%;
+            height: 48px;
+            text-align: left;
+            font-size: 15px;
+            font-weight: 500;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            box-sizing: border-box;
+        }
+
+        .nav-item:hover {
+            background-color: #e9ecef;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .nav-item.active {
+            background-color: #ffbc13 !important;
+            color: #0a3578 !important;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(255, 188, 19, 0.3);
+        }
+
+        .nav-icon {
+            margin-right: 12px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0a3578;
+            font-size: 18px;
+        }
+
+        /* Main Content - With Left Margin for Sidebar */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f4f5f3;
+            overflow-x: hidden;
+            overflow-y: auto;
+            box-sizing: border-box;
+            width: 100%;
+            margin-left: 220px; /* Exact sidebar width */
+            padding: 0;
+            flex: 1;
+        }
+
+        .dashboard-frame {
+            width: 100%;
+            margin: 0;
+            padding: 24px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            box-sizing: border-box;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Header Section */
+        .dashboard-header {
+            background: white;
+            border-radius: 16px;
+            padding: 20px 32px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 80px;
+            box-sizing: border-box;
+            border: 1px solid #f1f3f4;
+        }
+
+        .greeting-text {
+            font-size: 24px;
+            font-weight: 600;
+            color: #0a3578;
+            margin: 0;
+            line-height: 32px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .notification-badge {
+            width: 44px;
+            height: 44px;
+            background: #ffbc13;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(255, 188, 19, 0.3);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .notification-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 188, 19, 0.4);
+        }
+
+        .profile-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: #f8f9fa;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            font-size: 20px;
+            color: #0a3578;
+        }
+
+        .profile-avatar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Top Row */
+        .top-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .attendance-profile-card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            min-height: 140px;
+            box-sizing: border-box;
+            border: 1px solid #f1f3f4;
+            transition: all 0.2s ease;
+        }
+
+        .attendance-profile-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .employee-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: #f8f9fa;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            overflow: hidden;
+            border: 2px solid #e5e7eb;
+        }
+
+        .employee-initial {
+            font-size: 32px;
+            font-weight: bold;
+            color: #0a3578;
+        }
+
+        .attendance-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+            flex: 1;
+        }
+
+        .stat-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 15px;
+            color: #0a3578;
+            font-weight: 500;
+            margin-bottom: 8px;
+            line-height: 20px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0a3578;
+            line-height: 28px;
+        }
+
+        .top-performer-card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            min-height: 140px;
+            box-sizing: border-box;
+            border: 1px solid #f1f3f4;
+            transition: all 0.2s ease;
+        }
+
+        .top-performer-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .performer-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0a3578;
+            margin: 0 0 16px 0;
+            line-height: 24px;
+        }
+
+        .performer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .performer-info {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .performer-name-badge {
+            background: #feb910;
+            border-radius: 12px;
+            padding: 8px 16px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #0a3578;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(254, 185, 16, 0.3);
+            min-width: 90px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+
+        .performer-role {
+            font-size: 15px;
+            color: #0a3578;
+            font-weight: 500;
+            text-align: center;
+            line-height: 20px;
+        }
+
+        .performer-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: #f8f9fa;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #e5e7eb;
+            font-size: 24px;
+            color: #0a3578;
+        }
+
+        /* Demo Content */
+        .demo-content {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f1f3f4;
+            margin-top: 24px;
+        }
+
+        .demo-content h3 {
+            color: #0a3578;
+            margin-bottom: 16px;
+        }
+
+        .demo-content p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        /* Responsive Design */
+
+        /* Large Desktop (1400px+) */
+        @media (min-width: 1400px) {
+            .main-content {
+                padding: 24px 32px;
+            }
+        }
+
+        /* Desktop (1200px - 1399px) */
+        @media (min-width: 1200px) and (max-width: 1399px) {
+            .main-content {
+                padding: 24px 28px;
+            }
+        }
+
+        /* Medium Desktop (1024px - 1199px) */
+        @media (min-width: 1024px) and (max-width: 1199px) {
+            .sidebar {
+                width: 200px;
+                padding: 20px 16px;
+            }
+            
+            .main-content {
+                margin-left: 200px; /* Match sidebar width */
+                padding: 20px 24px;
+            }
+        }
+
+        /* Tablet (768px - 1023px) */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .sidebar {
+                width: 180px;
+                padding: 16px 12px;
+            }
+            
+            .logo-image {
+                max-height: 60px;
+                max-width: 100px;
+            }
+            
+            .nav-item {
+                height: 44px;
+                font-size: 14px;
+                padding: 10px 12px;
+            }
+            
+            .main-content {
+                margin-left: 180px; /* Match sidebar width */
+                padding: 16px 20px;
+            }
+            
+            .top-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+            }
+            
+            .attendance-profile-card,
+            .top-performer-card {
+                padding: 20px;
+                min-height: 120px;
+            }
+            
+            .employee-avatar,
+            .performer-avatar {
+                width: 56px;
+                height: 56px;
+            }
+            
+            .attendance-stats {
+                gap: 20px;
+            }
+        }
+
+        /* Mobile (max-width: 767px) */
+        @media (max-width: 767px) {
+            .dashboard-layout {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                padding: 16px 20px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                border-right: none;
+                border-bottom: 1px solid #e5e7eb;
+                z-index: 1001;
+            }
+            
+            .navigation {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 8px;
+                overflow-x: auto;
+                padding-bottom: 8px;
+            }
+            
+            .nav-item {
+                flex: 0 0 auto;
+                width: auto;
+                min-width: 120px;
+                height: 40px;
+                font-size: 13px;
+                padding: 8px 12px;
+            }
+            
+            .main-content {
+                margin-left: 0; /* Remove left margin on mobile */
+                padding: 16px;
+                width: 100%;
+            }
+            
+            .dashboard-header {
+                padding: 16px 20px;
+                min-height: 60px;
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
+            
+            .greeting-text {
+                font-size: 18px;
+                line-height: 24px;
+            }
+            
+            .header-actions {
+                gap: 16px;
+            }
+            
+            .top-row {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .attendance-profile-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+                padding: 20px;
+                min-height: auto;
+            }
+            
+            .attendance-stats {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 16px;
+                width: 100%;
+            }
+            
+            .top-performer-card {
+                padding: 20px;
+                min-height: auto;
+            }
+            
+            .performer-content {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+            
+            .employee-avatar,
+            .performer-avatar {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .logo-section {
+                margin-bottom: 16px;
+            }
+            
+            .logo-image {
+                max-height: 50px;
+                max-width: 80px;
+            }
+        }
+
+        /* Small Mobile (max-width: 480px) */
+        @media (max-width: 480px) {
+            .sidebar {
+                padding: 12px 16px;
+            }
+            
+            .navigation {
+                gap: 6px;
+            }
+            
+            .nav-item {
+                min-width: 100px;
+                height: 36px;
+                font-size: 12px;
+                padding: 6px 10px;
+            }
+            
+            .main-content {
+                margin-left: 0; /* Ensure no left margin on small mobile */
+                padding: 12px;
+            }
+            
+            .dashboard-header {
+                padding: 12px 16px;
+                min-height: 50px;
+            }
+            
+            .greeting-text {
+                font-size: 16px;
+                line-height: 22px;
+            }
+            
+            .header-actions {
+                gap: 12px;
+            }
+            
+            .notification-badge {
+                width: 36px;
+                height: 36px;
+            }
+            
+            .profile-avatar {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .attendance-profile-card,
+            .top-performer-card {
+                padding: 16px;
+            }
+            
+            .attendance-stats {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .employee-avatar,
+            .performer-avatar {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .employee-initial {
+                font-size: 24px;
+            }
+            
+            .stat-label {
+                font-size: 12px;
+            }
+            
+            .stat-value {
+                font-size: 18px;
+            }
+            
+            .performer-title {
+                font-size: 14px;
+            }
+            
+            .performer-name-badge {
+                font-size: 14px;
+                padding: 6px 12px;
+                height: 32px;
+            }
+            
+            .performer-role {
+                font-size: 12px;
+            }
+            
+            .logo-image {
+                max-height: 40px;
+                max-width: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Fixed Sidebar -->
+        <div class="sidebar">
+            <div class="logo-section">
+                <div class="logo-image">
+                    SUMERU
+                </div>
+            </div>
+            
+            <div class="navigation">
+                <a href="#" class="nav-item active">
+                    <div class="nav-icon">📊</div>
+                    <span>Dashboard</span>
+                </a>
+                
+                <a href="#" class="nav-item">
+                    <div class="nav-icon">💡</div>
+                    <span>Insights</span>
+                </a>
+                
+                <a href="#" class="nav-item">
+                    <div class="nav-icon">💬</div>
+                    <span>Feedback</span>
+                </a>
+                
+                <a href="#" class="nav-item">
+                    <div class="nav-icon">👥</div>
+                    <span>Members</span>
+                </a>
+                
+                <a href="#" class="nav-item">
+                    <div class="nav-icon">📋</div>
+                    <span>Appraisal</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content with Left Margin -->
+        <div class="main-content">
+            <div class="dashboard-frame">
+                <!-- Header -->
+                <div class="dashboard-header">
+                    <h1 class="greeting-text">Good Morning, XYZ!</h1>
+                    <div class="header-actions">
+                        <div class="notification-badge">
+                            🔔
+                        </div>
+                        <div class="profile-avatar">
+                            👤
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Row - Attendance Profile & Top Performer -->
+                <div class="top-row">
+                    <div class="attendance-profile-card">
+                        <div class="employee-avatar">
+                            <div class="employee-initial">A</div>
+                        </div>
+                        <div class="attendance-stats">
+                            <div class="stat-column">
+                                <div class="stat-label">Total office days</div>
+                                <div class="stat-value">26</div>
+                            </div>
+                            <div class="stat-column">
+                                <div class="stat-label">Attended days</div>
+                                <div class="stat-value">21</div>
+                            </div>
+                            <div class="stat-column">
+                                <div class="stat-label">Unscheduled Absence</div>
+                                <div class="stat-value">05</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="top-performer-card">
+                        <h3 class="performer-title">Top Performer of the Month</h3>
+                        <div class="performer-content">
+                            <div class="performer-info">
+                                <div class="performer-name-badge">ABC</div>
+                                <div class="performer-role">Junior Web Developer</div>
+                            </div>
+                            <div class="performer-avatar">
+                                👤
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Demo Content to Show Scrolling -->
+                <div class="demo-content">
+                    <h3>Scrollable Content Demo</h3>
+                    <p>This content demonstrates that the sidebar remains fixed while the main content scrolls.</p>
+                    <p>The sidebar has a fixed width of 220px and the main content has a left margin of exactly 220px.</p>
+                    <p>This ensures no overlap at any screen size.</p>
+                </div>
+
+                <div class="demo-content">
+                    <h3>Responsive Design</h3>
+                    <p>On desktop: Sidebar stays fixed on the left (220px width)</p>
+                    <p>On tablet: Sidebar reduces to 180px width with proper margin adjustment</p>
+                    <p>On mobile: Sidebar stacks on top with horizontal navigation</p>
+                </div>
+
+                <div class="demo-content">
+                    <h3>No Overlap Guarantee</h3>
+                    <p>The layout uses position: fixed for the sidebar and margin-left for main content.</p>
+                    <p>This ensures perfect alignment and no overlap at any browser size.</p>
+                    <p>Scroll down to see the sidebar staying in place!</p>
+                </div>
+
+                <!-- Additional content to demonstrate scrolling -->
+                <div class="demo-content">
+                    <h3>More Content</h3>
+                    <p>Keep scrolling to see how the sidebar remains fixed in position...</p>
+                </div>
+
+                <div class="demo-content">
+                    <h3>Even More Content</h3>
+                    <p>The sidebar should still be visible and fixed on the left side.</p>
+                </div>
+
+                <div class="demo-content">
+                    <h3>Final Section</h3>
+                    <p>Perfect! The sidebar stays fixed while content scrolls smoothly.</p>
+                    <p>No overlap, proper spacing, and responsive design achieved!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

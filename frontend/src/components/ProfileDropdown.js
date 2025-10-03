@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { authService } from '../services/auth';
 import './ProfileDropdown.css';
 
 const ProfileDropdown = () => {
@@ -14,9 +15,20 @@ const ProfileDropdown = () => {
   });
   const dropdownRef = useRef(null);
 
-  // Load profile data from localStorage
+  // Load profile data from localStorage and auth service
   useEffect(() => {
+    const user = authService.getCurrentUser();
     const savedProfile = localStorage.getItem('employeeProfile');
+    
+    if (user) {
+      setProfileData(prev => ({
+        ...prev,
+        name: user.displayName || 'User',
+        email: user.email || 'user@company.com',
+        role: user.department || 'Employee'
+      }));
+    }
+    
     if (savedProfile) {
       const parsedProfile = JSON.parse(savedProfile);
       setProfileData(prev => ({
@@ -55,10 +67,12 @@ const ProfileDropdown = () => {
   };
 
   const handleLogout = () => {
-    // Clear any stored data
+    // Use auth service to logout
+    authService.logout();
+    // Clear any additional stored data
     localStorage.removeItem('leaveRequests');
     localStorage.removeItem('employeeProfile');
-    // Navigate to login or home page
+    // Navigate to login page
     navigate('/');
   };
 

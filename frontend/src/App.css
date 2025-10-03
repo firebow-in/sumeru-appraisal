@@ -2,6 +2,36 @@
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background-color: #f5f5f5;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Dashboard Layout */
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: auto 1fr; /* Sidebar and main content */
+  gap: 2rem; /* Space between sidebar and main content */
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+/* Floating Card Style - Most Important! */
+.card {
+  background-color: #ffffff;
+  border-radius: 16px; /* Rounded corners */
+  padding: 24px; /* Space inside the card */
+  box-shadow: 0 8px 24px rgba(149, 157, 165, 0.2); /* The "floating" shadow effect */
+  border: 1px solid #e9ecef; /* Very subtle border */
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: 0 12px 32px rgba(149, 157, 165, 0.25);
+  transform: translateY(-2px);
+}
+
+/* Main Content Grid Layout */
+.main-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px; /* Space between cards */
+  align-content: start;
 }

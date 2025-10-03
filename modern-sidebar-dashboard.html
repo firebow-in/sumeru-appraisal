@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Sidebar Dashboard</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f5f3;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Dashboard Layout - CSS Grid */
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            min-height: 100vh;
+            background-color: #f4f5f3;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            gap: 0; /* No gap between sidebar and content */
+        }
+
+        /* Modern Sidebar - Full Height with Enhanced Styling */
+        .sidebar {
+            position: sticky;
+            top: 0;
+            width: 220px;
+            height: 100vh;
+            background-color: #ffffff;
+            padding: 32px 24px;
+            box-shadow: 4px 0 16px rgba(0, 0, 0, 0.08), 1px 0 0 rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            overflow-y: auto;
+            box-sizing: border-box;
+            border-right: 1px solid #e1e5e9;
+        }
+
+        /* Custom scrollbar for sidebar */
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 2px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 40px;
+            padding: 16px 0;
+        }
+
+        /* Mobile Hamburger Menu */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 2000;
+            background: #ffffff;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-toggle:hover {
+            background: #f3f4f6;
+            transform: scale(1.05);
+        }
+
+        .hamburger-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .hamburger-line {
+            width: 100%;
+            height: 3px;
+            background: #374151;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-toggle.active .hamburger-line:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .mobile-menu-toggle.active .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-toggle.active .hamburger-line:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        /* Mobile Sidebar Overlay */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1500;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+        }
+
+        .logo-image {
+            max-height: 80px;
+            max-width: 120px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 16px;
+            padding: 20px;
+        }
+
+        .navigation {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+            padding: 0;
+        }
+
+        /* Enhanced Navigation Items */
+        .nav-item {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 14px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #374151;
+            text-decoration: none;
+            background-color: transparent;
+            border: none;
+            width: 100%;
+            height: 52px;
+            text-align: left;
+            font-size: 15px;
+            font-weight: 500;
+            box-sizing: border-box;
+            position: relative;
+            margin-bottom: 4px;
+        }
+
+        .nav-item:hover {
+            background-color: #f3f4f6;
+            color: #1f2937;
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-item:hover .nav-icon {
+            color: #3b82f6;
+            transform: scale(1.1);
+        }
+
+        .nav-item.active {
+            background-color: #3b82f6 !important;
+            color: #ffffff !important;
+            font-weight: 600;
+            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+            transform: translateX(4px);
+        }
+
+        .nav-item.active .nav-icon {
+            color: #ffffff !important;
+        }
+
+        .nav-icon {
+            margin-right: 14px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+            font-size: 18px;
+        }
+
+        .nav-icon svg {
+            width: 100%;
+            height: 100%;
+            color: inherit;
+        }
+
+        /* Feedback Section */
+        .feedback-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .feedback-main {
+            background-color: #f59e0b !important;
+            color: #ffffff !important;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3) !important;
+        }
+
+        .feedback-main:hover {
+            background-color: #d97706 !important;
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4) !important;
+            transform: translateX(4px);
+        }
+
+        .feedback-submenu {
+            margin-top: 8px;
+            padding-left: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-subitem {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #374151;
+            text-decoration: none;
+            background-color: #f8f9fa;
+            border: none;
+            width: 100%;
+            height: 36px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+            box-sizing: border-box;
+            margin-top: 0;
+        }
+
+        .nav-subitem:hover {
+            background-color: #e5e7eb;
+            transform: translateX(2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+        }
+
+        .nav-subitem.active {
+            background-color: #f4f3f3 !important;
+            color: #374151 !important;
+            font-weight: 600;
+        }
+
+        .nav-subitem .nav-icon {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Main Content - Grid Item Flush with Sidebar */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f4f5f3;
+            overflow-x: hidden;
+            overflow-y: auto;
+            box-sizing: border-box;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .dashboard-frame {
+            width: 100%;
+            margin: 0;
+            padding: 16px; /* Minimal spacing as per design */
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px; /* Consistent 16px spacing */
+            box-sizing: border-box;
+        }
+
+        /* Header Section */
+        .dashboard-header {
+            background: white;
+            border-radius: 16px;
+            padding: 20px 32px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 80px;
+            box-sizing: border-box;
+            border: 1px solid #f1f3f4;
+        }
+
+        .greeting-text {
+            font-size: 24px;
+            font-weight: 600;
+            color: #0a3578;
+            margin: 0;
+            line-height: 32px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .notification-badge {
+            width: 44px;
+            height: 44px;
+            background: #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            font-size: 18px;
+            color: white;
+        }
+
+        .notification-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+        }
+
+        .profile-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: #f8f9fa;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            font-size: 20px;
+            color: #374151;
+        }
+
+        .profile-avatar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Demo Content */
+        .demo-content {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f1f3f4;
+        }
+
+        .demo-content h3 {
+            color: #374151;
+            margin-bottom: 16px;
+            font-size: 18px;
+        }
+
+        .demo-content p {
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        /* Responsive Design */
+
+        /* Large Desktop (1400px+) */
+        @media (min-width: 1400px) {
+            .main-content {
+                padding: 24px 32px;
+            }
+        }
+
+        /* Desktop (1200px - 1399px) */
+        @media (min-width: 1200px) and (max-width: 1399px) {
+            .main-content {
+                padding: 24px 28px;
+            }
+        }
+
+        /* Medium Desktop (1024px - 1199px) */
+        @media (min-width: 1024px) and (max-width: 1199px) {
+            .dashboard-layout {
+                grid-template-columns: 200px 1fr;
+            }
+            
+            .sidebar {
+                width: 200px;
+                padding: 18px 14px;
+            }
+        }
+
+        /* Tablet (768px - 1023px) */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .dashboard-layout {
+                grid-template-columns: 180px 1fr;
+            }
+            
+            .sidebar {
+                width: 180px;
+                padding: 16px 12px;
+            }
+            
+            .logo-image {
+                max-height: 60px;
+                max-width: 100px;
+            }
+            
+            .nav-item {
+                height: 44px;
+                font-size: 14px;
+                padding: 10px 12px;
+            }
+            
+            .nav-subitem {
+                height: 32px;
+                font-size: 12px;
+                padding: 6px 10px;
+            }
+        }
+
+        /* Mobile (max-width: 767px) */
+        @media (max-width: 767px) {
+            .dashboard-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .mobile-menu-toggle {
+                display: flex;
+            }
+            
+            .sidebar-overlay {
+                display: block;
+            }
+            
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: -280px; /* Hidden by default */
+                width: 280px;
+                height: 100vh;
+                padding: 80px 24px 32px 24px; /* Top padding for hamburger menu */
+                box-shadow: 8px 0 24px rgba(0, 0, 0, 0.15);
+                border-right: 1px solid #e1e5e9;
+                z-index: 1600;
+                transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                background: #ffffff;
+            }
+            
+            .sidebar.mobile-open {
+                left: 0;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 8px;
+                overflow-x: visible;
+                padding-bottom: 0;
+            }
+            
+            .nav-item {
+                width: 100%;
+                height: 48px;
+                font-size: 15px;
+                padding: 14px 18px;
+                margin-bottom: 4px;
+            }
+            
+            .nav-subitem {
+                width: 100%;
+                height: 40px;
+                font-size: 13px;
+                padding: 10px 16px;
+            }
+            
+            .feedback-submenu {
+                flex-direction: column;
+                gap: 4px;
+                margin-top: 4px;
+            }
+            
+            .main-content {
+                width: 100%;
+                padding: 80px 16px 16px 16px; /* Top padding for hamburger menu */
+            }
+            
+            .logo-section {
+                margin-bottom: 32px;
+                padding: 16px 0;
+            }
+            
+            .logo-image {
+                max-height: 60px;
+                max-width: 100px;
+            }
+        }
+
+        /* Small Mobile (max-width: 480px) */
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 260px;
+                left: -260px;
+                padding: 80px 20px 32px 20px;
+            }
+            
+            .sidebar.mobile-open {
+                left: 0;
+            }
+            
+            .navigation {
+                gap: 6px;
+            }
+            
+            .nav-item {
+                height: 44px;
+                font-size: 14px;
+                padding: 12px 16px;
+            }
+            
+            .nav-subitem {
+                height: 36px;
+                font-size: 12px;
+                padding: 8px 14px;
+            }
+            
+            .main-content {
+                padding: 80px 12px 12px 12px;
+            }
+            
+            .logo-image {
+                max-height: 50px;
+                max-width: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
+            <div class="hamburger-icon">
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+            </div>
+        </button>
+
+        <!-- Mobile Sidebar Overlay -->
+        <div class="sidebar-overlay" onclick="closeMobileMenu()"></div>
+
+        <!-- Modern Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="logo-section">
+                <div class="logo-image">
+                    SUMERU
+                </div>
+            </div>
+            
+            <div class="navigation">
+                <a href="#" class="nav-item active">
+                    <div class="nav-icon">📊</div>
+                    <span>Dashboard</span>
+                </a>
+                
+                <a href="#" class="nav-item">
+                    <div class="nav-icon">💡</div>
+                    <span>Insights</span>
+                </a>
+                
+                <div class="feedback-section">
+                    <a href="#" class="nav-item feedback-main">
+                        <div class="nav-icon">💬</div>
+                        <span>Feedback</span>
+                    </a>
+                    
+                    <div class="feedback-submenu">
+                        <a href="#" class="nav-subitem">
+                            <div class="nav-icon">📤</div>
+                            <span>Send Feedback</span>
+                        </a>
+                        <a href="#" class="nav-subitem">
+                            <div class="nav-icon">📥</div>
+                            <span>Receive Feedback</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <a href="#" class="nav-item">
+                    <div class="nav-icon">👥</div>
+                    <span>Members</span>
+                </a>
+                
+                <a href="#" class="nav-item">
+                    <div class="nav-icon">📋</div>
+                    <span>Appraisal</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="dashboard-frame">
+                <!-- Header -->
+                <div class="dashboard-header">
+                    <h1 class="greeting-text">Good Morning, XYZ!</h1>
+                    <div class="header-actions">
+                        <div class="notification-badge">
+                            🔔
+                        </div>
+                        <div class="profile-avatar">
+                            👤
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Demo Content -->
+                <div class="demo-content">
+                    <h3>Modern Sidebar Features</h3>
+                    <p>✅ Full viewport height with sticky positioning</p>
+                    <p>✅ Proper padding and spacing for visual balance</p>
+                    <p>✅ Centered icons and labels in menu items</p>
+                    <p>✅ Subtle box-shadow and border for distinction</p>
+                    <p>✅ Smooth hover effects with color and transform animations</p>
+                    <p>✅ Responsive hamburger menu for mobile devices</p>
+                    <p>✅ No gaps between sidebar and main content</p>
+                </div>
+
+                <div class="demo-content">
+                    <h3>Responsive Design</h3>
+                    <p>🖥️ <strong>Desktop:</strong> Full sidebar with smooth hover effects</p>
+                    <p>📱 <strong>Tablet:</strong> Compact sidebar with maintained functionality</p>
+                    <p>📱 <strong>Mobile:</strong> Slide-out hamburger menu with overlay</p>
+                    <p>Try resizing your browser window to see the responsive behavior!</p>
+                </div>
+
+                <div class="demo-content">
+                    <h3>Interaction Features</h3>
+                    <p>🎯 Hover over navigation items to see smooth animations</p>
+                    <p>🎯 Active state shows current page with blue highlight</p>
+                    <p>🎯 Icons scale and change color on hover</p>
+                    <p>🎯 Smooth slide animations for mobile menu</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let mobileMenuOpen = false;
+
+        function toggleMobileMenu() {
+            mobileMenuOpen = !mobileMenuOpen;
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            
+            if (mobileMenuOpen) {
+                sidebar.classList.add('mobile-open');
+                overlay.classList.add('active');
+                toggle.classList.add('active');
+            } else {
+                sidebar.classList.remove('mobile-open');
+                overlay.classList.remove('active');
+                toggle.classList.remove('active');
+            }
+        }
+
+        function closeMobileMenu() {
+            mobileMenuOpen = false;
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            
+            sidebar.classList.remove('mobile-open');
+            overlay.classList.remove('active');
+            toggle.classList.remove('active');
+        }
+
+        // Close mobile menu when clicking on navigation items
+        document.querySelectorAll('.nav-item, .nav-subitem').forEach(item => {
+            item.addEventListener('click', closeMobileMenu);
+        });
+    </script>
+</body>
+</html>

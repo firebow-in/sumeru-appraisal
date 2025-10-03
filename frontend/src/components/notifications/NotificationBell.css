@@ -1,0 +1,176 @@
+/* Notification Bell Component Styles */
+.notification-bell {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  vertical-align: middle;
+}
+
+.notification-bell.clickable:hover {
+  transform: scale(1.05);
+}
+
+/* Circular Background (Ellipse) */
+.notification-background {
+  position: relative;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+/* Size Variants */
+.bell-size-small .notification-background {
+  width: 40px;
+  height: 40px;
+}
+
+.bell-size-medium .notification-background {
+  width: 50px;
+  height: 50px;
+}
+
+.bell-size-large .notification-background {
+  width: 60px;
+  height: 60px;
+}
+
+/* Ensure consistent alignment with profile avatar */
+.notification-bell {
+  flex-shrink: 0;
+}
+
+/* Color Variants */
+.bell-variant-default .notification-background {
+  background: #ffbd13; /* Exact Figma yellow */
+  color: white;
+}
+
+.bell-variant-primary .notification-background {
+  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+  color: white;
+}
+
+.bell-variant-accent .notification-background {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+  color: white;
+}
+
+/* Hover Effects */
+.notification-bell:hover .notification-background {
+  box-shadow: 0 6px 20px rgba(255, 189, 19, 0.4);
+  transform: translateY(-2px);
+}
+
+.bell-variant-primary .notification-bell:hover .notification-background {
+  box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+}
+
+.bell-variant-accent .notification-bell:hover .notification-background {
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+/* Icon Frame */
+.notification-icon-frame {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70%;
+  height: 70%;
+}
+
+/* Bell Icon */
+.notification-icon {
+  width: 100%;
+  height: 100%;
+  color: inherit;
+  transition: all 0.3s ease;
+}
+
+.notification-bell:hover .notification-icon {
+  transform: rotate(15deg);
+  animation: bellRing 0.5s ease-in-out;
+}
+
+/* Notification Badge */
+.notification-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #ff4757;
+  color: white;
+  border-radius: 50%;
+  min-width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  border: 2px solid white;
+  box-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);
+  z-index: 10;
+}
+
+.bell-size-small .notification-badge {
+  min-width: 16px;
+  height: 16px;
+  font-size: 9px;
+  top: -6px;
+  right: -6px;
+}
+
+.bell-size-large .notification-badge {
+  min-width: 24px;
+  height: 24px;
+  font-size: 12px;
+  top: -10px;
+  right: -10px;
+}
+
+.badge-count {
+  line-height: 1;
+  padding: 0 2px;
+}
+
+
+/* Animations */
+@keyframes bellRing {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(15deg); }
+  75% { transform: rotate(-15deg); }
+}
+
+
+/* Active State */
+.notification-bell.has-notifications .notification-background {
+  /* Removed pulse animation to prevent extra visual effects */
+}
+
+/* Focus States for Accessibility */
+.notification-bell:focus {
+  outline: none;
+}
+
+.notification-bell:focus .notification-background {
+  box-shadow: 0 0 0 3px rgba(255, 189, 19, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .bell-size-medium .notification-background {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .bell-size-large .notification-background {
+    width: 50px;
+    height: 50px;
+  }
+}

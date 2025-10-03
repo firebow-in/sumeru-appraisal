@@ -1,31 +1,50 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
-import Dashboard from './components/Dashboard';
-import DashboardPage from './pages/DashboardPage';
-import Insights from './pages/Insights';
-import Members from './pages/Members';
-import Appraisal from './pages/Appraisal';
-import AppraisalForm from './pages/AppraisalForm';
-import AppraisalView from './pages/AppraisalView';
-import RequestLeave from './pages/RequestLeave';
-import TimeOff from './pages/TimeOff';
-import LeaveHistory from './pages/LeaveHistory';
-import AttendanceTracker from './pages/AttendanceTracker';
-import ProfilePage from './pages/ProfilePage';
 
-// add your feedback subpages
-import SendFeedback from './pages/SendFeedback';
-import ReceiveFeedback from './pages/ReceiveFeedback';
+// Layout and Auth components
+import DashboardLayout from './layouts/DashboardLayout';
+import AuthGuard from './components/AuthGuard';
+
+// Login page
+import LoginPage from './pages/login/LoginPage';
+
+// Employee pages
+import EmployeeDashboard from './pages/employee/DashboardPage';
+import Insights from './pages/employee/Insights';
+import Members from './pages/employee/Members';
+import Appraisal from './pages/employee/Appraisal';
+import AppraisalForm from './pages/employee/AppraisalForm';
+import AppraisalView from './pages/employee/AppraisalView';
+import RequestLeave from './pages/employee/RequestLeave';
+import TimeOff from './pages/employee/TimeOff';
+import LeaveHistory from './pages/employee/LeaveHistory';
+import AttendanceTracker from './pages/employee/AttendanceTracker';
+import ProfilePage from './pages/employee/ProfilePage';
+import SendFeedback from './pages/employee/SendFeedback';
+import ReceiveFeedback from './pages/employee/ReceiveFeedback';
+
+// Role-specific dashboards
+import HrDashboard from './pages/hr/HrDashboard';
+import PmDashboard from './pages/project-manager/PmDashboard';
+import CeoDashboard from './pages/ceo/CeoDashboard';
+import InternDashboard from './pages/intern/InternDashboard';
 
 function App() {
   return (
     <div className="App">
       <Router>
         <Routes>
-          <Route path="/" element={<Dashboard />}>
-            <Route index element={<DashboardPage />} />
-            <Route path="dashboard" element={<DashboardPage />} />
+          {/* Login Route */}
+          <Route path="/" element={<LoginPage />} />
+          
+          {/* Employee Dashboard with Layout */}
+          <Route path="/employee/dashboard" element={
+            <AuthGuard>
+              <DashboardLayout />
+            </AuthGuard>
+          }>
+            <Route index element={<EmployeeDashboard />} />
             <Route path="insights" element={<Insights />} />
             
             {/* Feedback parent with nested routes */}
@@ -44,6 +63,12 @@ function App() {
             <Route path="attendance-tracker" element={<AttendanceTracker />} />
             <Route path="profile" element={<ProfilePage />} />
           </Route>
+          
+          {/* Other Role-specific Dashboard Routes */}
+          <Route path="/hr/dashboard" element={<HrDashboard />} />
+          <Route path="/project-manager/dashboard" element={<PmDashboard />} />
+          <Route path="/ceo/dashboard" element={<CeoDashboard />} />
+          <Route path="/intern/dashboard" element={<InternDashboard />} />
         </Routes>
       </Router>
     </div>
