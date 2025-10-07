@@ -5,12 +5,10 @@ import {
   FiEye, 
   FiPlus, 
   FiTrash2, 
-  FiEdit3,
-  FiMove,
-  FiCopy,
   FiX,
   FiCheck,
-  FiBarChart2
+  FiArrowUp,
+  FiArrowDown
 } from 'react-icons/fi';
 import './FormEdit.css';
 import FormPreview from './FormPreview';
@@ -45,11 +43,11 @@ const FormEdit = ({ formId, onBack, onSave }) => {
   const [form, setForm] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState('details');
-  const [editingQuestion, setEditingQuestion] = useState(null);
+  // Single-page editor: details and questions shown together
+  // Removed question type editing; only rating scale is supported
   const [showAddQuestion, setShowAddQuestion] = useState(false);
   const [newQuestion, setNewQuestion] = useState({
-    type: 'text',
+    type: 'rating',
     question: '',
     options: [],
     required: true
@@ -68,20 +66,39 @@ const FormEdit = ({ formId, onBack, onSave }) => {
           id: 1,
           type: 'rating',
           question: 'How would you rate your overall job performance this year?',
-          options: ['Poor', 'Fair', 'Good', 'Very Good', 'Excellent'],
+          options: [
+            { label: 'Does Not Meet Expectations', points: 1 },
+            { label: 'Sometimes Meets Expectations', points: 2 },
+            { label: 'Meets All Expectations', points: 3 },
+            { label: 'Often Exceeds Expectations', points: 4 },
+            { label: 'Consistently Exceeds Expectations', points: 5 }
+          ],
           required: true
         },
         {
           id: 2,
-          type: 'text',
-          question: 'What are your key achievements this year?',
+          type: 'rating',
+          question: 'How would you rate your communication skills?',
+          options: [
+            { label: 'Needs Significant Improvement', points: 1 },
+            { label: 'Needs Some Improvement', points: 2 },
+            { label: 'Meets Expectations', points: 3 },
+            { label: 'Exceeds Expectations', points: 4 },
+            { label: 'Outstanding', points: 5 }
+          ],
           required: true
         },
         {
           id: 3,
-          type: 'multiple-choice',
-          question: 'Which areas do you feel you need improvement in?',
-          options: ['Communication', 'Technical Skills', 'Leadership', 'Time Management', 'Teamwork'],
+          type: 'rating',
+          question: 'How would you rate your teamwork and collaboration?',
+          options: [
+            { label: 'Poor', points: 1 },
+            { label: 'Fair', points: 2 },
+            { label: 'Good', points: 3 },
+            { label: 'Very Good', points: 4 },
+            { label: 'Excellent', points: 5 }
+          ],
           required: true
         }
       ],
@@ -89,7 +106,10 @@ const FormEdit = ({ formId, onBack, onSave }) => {
       lastModified: '2024-01-20',
       status: 'Active',
       responses: 45,
-      author: 'HR Team'
+      author: 'HR Team',
+      // Appraisal forms are always identified and restricted by default
+      responseType: 'identified',
+      accessType: 'restricted'
     }
   };
 
@@ -101,6 +121,7 @@ const FormEdit = ({ formId, onBack, onSave }) => {
     }, 500);
 
     return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formId]);
 
   const handleFormChange = (field, value) => {
@@ -113,9 +134,20 @@ const FormEdit = ({ formId, onBack, onSave }) => {
   const handleQuestionChange = (questionId, field, value) => {
     setForm(prev => ({
       ...prev,
-      questions: prev.questions.map(q => 
-        q.id === questionId ? { ...q, [field]: value } : q
-      )
+      questions: prev.questions.map(q => {
+        if (q.id === questionId) {
+          const updatedQuestion = { ...q, [field]: value };
+          
+          // All questions are rating type, ensure options array exists
+          if (field === 'type') {
+            updatedQuestion.type = 'rating';
+            updatedQuestion.options = q.options || [];
+          }
+          
+          return updatedQuestion;
+        }
+        return q;
+      })
     }));
   };
 
@@ -137,8 +169,8 @@ const FormEdit = ({ formId, onBack, onSave }) => {
         q.id === questionId 
           ? { 
               ...q, 
-              options: q.options.map((opt, idx) => {
-                const normalized = typeof opt === 'string' ? { label: opt, points: (q.options.length === 5 ? idx + 1 : 1) } : opt;
+              options: (q.options || []).map((opt, idx) => {
+                const normalized = typeof opt === 'string' ? { label: opt, points: ((q.options || []).length === 5 ? idx + 1 : 1) } : opt;
                 return idx === optionIndex ? { ...normalized, label: value } : normalized;
               })
             }
@@ -155,8 +187,8 @@ const FormEdit = ({ formId, onBack, onSave }) => {
         q.id === questionId 
           ? { 
               ...q, 
-              options: q.options.map((opt, idx) => {
-                const normalized = typeof opt === 'string' ? { label: opt, points: (q.options.length === 5 ? idx + 1 : 1) } : opt;
+              options: (q.options || []).map((opt, idx) => {
+                const normalized = typeof opt === 'string' ? { label: opt, points: ((q.options || []).length === 5 ? idx + 1 : 1) } : opt;
                 return idx === optionIndex ? { ...normalized, points: Math.max(1, Math.min(5, parsed)) } : normalized;
               })
             }
@@ -172,7 +204,7 @@ const FormEdit = ({ formId, onBack, onSave }) => {
         q.id === questionId 
           ? { 
               ...q, 
-              options: q.options.filter((_, idx) => idx !== optionIndex)
+              options: (q.options || []).filter((_, idx) => idx !== optionIndex)
             }
           : q
       )
@@ -194,8 +226,9 @@ const FormEdit = ({ formId, onBack, onSave }) => {
     const newId = Math.max(...form.questions.map(q => q.id), 0) + 1;
     const question = {
       id: newId,
-      ...newQuestion,
-      options: newQuestion.type === 'text' ? [] : newQuestion.options,
+      type: 'rating',
+      question: newQuestion.question,
+      options: newQuestion.options || [],
       required: true
     };
     
@@ -205,7 +238,7 @@ const FormEdit = ({ formId, onBack, onSave }) => {
     }));
     
     setNewQuestion({
-      type: 'text',
+      type: 'rating',
       question: '',
       options: [],
       required: true
@@ -248,23 +281,7 @@ const FormEdit = ({ formId, onBack, onSave }) => {
     setShowPreview(true);
   };
 
-  const getQuestionTypeIcon = (type) => {
-    switch (type) {
-      case 'rating': return <FiBarChart2 />;
-      case 'text': return '📝';
-      case 'multiple-choice': return '☑️';
-      default: return '❓';
-    }
-  };
-
-  const getQuestionTypeLabel = (type) => {
-    switch (type) {
-      case 'rating': return 'Rating Scale';
-      case 'text': return 'Text Input';
-      case 'multiple-choice': return 'Multiple Choice';
-      default: return 'Question';
-    }
-  };
+  // Question type UI removed; rating scale is the default and only type
 
   if (loading) {
     return (
@@ -301,6 +318,10 @@ const FormEdit = ({ formId, onBack, onSave }) => {
             <FiArrowLeft />
             Back to Forms
           </button>
+          <div className="brand-logo" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <img src="/Sumeru_Logo.png" alt="Sumeru" style={{ width: 28, height: 28, objectFit: 'contain' }} />
+            <span style={{ fontWeight: 700, color: '#0a3578' }}>Create Appraisal Form</span>
+          </div>
           <div className="form-title-section">
             <input
               type="text"
@@ -359,27 +380,7 @@ const FormEdit = ({ formId, onBack, onSave }) => {
         </div>
       </div>
 
-      {/* Navigation Tabs */}
-      <div className="form-edit-tabs">
-        <button 
-          className={`tab-btn ${activeTab === 'details' ? 'active' : ''}`}
-          onClick={() => setActiveTab('details')}
-        >
-          📋 Form Details
-        </button>
-        <button 
-          className={`tab-btn ${activeTab === 'questions' ? 'active' : ''}`}
-          onClick={() => setActiveTab('questions')}
-        >
-          ❓ Questions ({form.questions.length})
-        </button>
-        <button 
-          className={`tab-btn ${activeTab === 'settings' ? 'active' : ''}`}
-          onClick={() => setActiveTab('settings')}
-        >
-          ⚙️ Settings
-        </button>
-      </div>
+      {/* Tabs removed: single-page editor */}
 
       {/* Content */}
       <div className="form-edit-content">
@@ -390,34 +391,39 @@ const FormEdit = ({ formId, onBack, onSave }) => {
             </div>
           </div>
         )}
-        {activeTab === 'details' && (
-          <div className="details-tab">
-            <div className="form-details-card">
-              <h3>Form Information</h3>
-              <div className="form-field">
-                <label>Description</label>
-                <textarea
-                  value={form.description}
-                  onChange={(e) => handleFormChange('description', e.target.value)}
-                  placeholder="Describe the purpose of this form..."
-                  rows={4}
-                />
-              </div>
-              <div className="form-field">
-                <label>Author</label>
-                <input
-                  type="text"
-                  value={form.author}
-                  onChange={(e) => handleFormChange('author', e.target.value)}
-                  placeholder="Form author name"
-                />
+        {/* Unified Details Section */}
+        <div className="details-tab">
+          <div className="form-details-card">
+            <h3>Form Information</h3>
+            <div className="form-field">
+              <label>Description</label>
+              <textarea
+                value={form.description}
+                onChange={(e) => handleFormChange('description', e.target.value)}
+                placeholder="Describe the purpose of this form..."
+                rows={4}
+              />
+            </div>
+            <div className="form-field">
+              <label>Author</label>
+              <input
+                type="text"
+                value={form.author}
+                onChange={(e) => handleFormChange('author', e.target.value)}
+                placeholder="Form author name"
+              />
+            </div>
+            <div className="form-info-note">
+              <div className="info-icon">ℹ️</div>
+              <div className="info-content">
+                <strong>Appraisal Form Configuration:</strong> This form is automatically configured for identified responses and restricted access. The deadline will be set when you assign this form to specific employees and their managers.
               </div>
             </div>
           </div>
-        )}
+        </div>
 
-        {activeTab === 'questions' && (
-          <div className="questions-tab">
+        {/* Unified Questions Section */}
+        <div className="questions-tab">
             <div className="questions-header">
               <h3>Form Questions</h3>
               <button 
@@ -436,20 +442,20 @@ const FormEdit = ({ formId, onBack, onSave }) => {
                     <div className="question-number">Q{index + 1}</div>
                     <div className="question-actions">
                       <button 
-                        className="action-btn"
+                        className="action-btn move-up"
                         onClick={() => handleMoveQuestion(question.id, 'up')}
                         disabled={index === 0}
                         title="Move Up"
                       >
-                        <FiMove />
+                        <FiArrowUp />
                       </button>
                       <button 
-                        className="action-btn"
+                        className="action-btn move-down"
                         onClick={() => handleMoveQuestion(question.id, 'down')}
                         disabled={index === form.questions.length - 1}
                         title="Move Down"
                       >
-                        <FiMove style={{ transform: 'rotate(180deg)' }} />
+                        <FiArrowDown />
                       </button>
                       <button 
                         className="action-btn danger"
@@ -462,17 +468,7 @@ const FormEdit = ({ formId, onBack, onSave }) => {
                   </div>
 
                   <div className="question-content">
-                    <div className="question-type-selector">
-                      <label>Question Type:</label>
-                      <select
-                        value={question.type}
-                        onChange={(e) => handleQuestionChange(question.id, 'type', e.target.value)}
-                      >
-                        <option value="text">Text Input</option>
-                        <option value="rating">Rating Scale</option>
-                        <option value="multiple-choice">Multiple Choice</option>
-                      </select>
-                    </div>
+                    {/* Question type selector removed; rating scale by default */}
 
                     <div className="question-text-field">
                       <label>Question Text:</label>
@@ -484,28 +480,26 @@ const FormEdit = ({ formId, onBack, onSave }) => {
                       />
                     </div>
 
-                    {(question.type === 'rating' || question.type === 'multiple-choice') && (
-                      <div className="question-options">
-                        <label>Options:</label>
-                        <div className="preset-row">
-                          <select
-                            className="preset-select"
-                            defaultValue=""
-                            onChange={(e) => {
-                              const key = e.target.value;
-                              if (key) applyPresetToQuestion(question.id, key);
-                            }}
-                          >
-                            <option value="" disabled>Use preset…</option>
-                            <option value="appraisalFivePoint">Appraisal 5-point rating</option>
-                            <option value="likertFive">Likert 5-point</option>
-                            <option value="yesNo">Yes / No</option>
-                            <option value="frequency">Frequency (Never → Always)</option>
-                          </select>
-                          <span className="preset-hint">Selecting a preset will replace current options.</span>
-                        </div>
-                        {question.options.map((option, optIndex) => {
-                          const optObj = typeof option === 'string' ? { label: option, points: (question.options.length === 5 ? optIndex + 1 : 1) } : option;
+                    <div className="question-options">
+                      <label>Rating Scale Options:</label>
+                      <div className="preset-row">
+                        <select
+                          className="preset-select"
+                          defaultValue=""
+                          onChange={(e) => {
+                            const key = e.target.value;
+                            if (key) applyPresetToQuestion(question.id, key);
+                          }}
+                        >
+                          <option value="" disabled>Use preset…</option>
+                          <option value="appraisalFivePoint">Appraisal 5-point rating</option>
+                          <option value="likertFive">Likert 5-point</option>
+                          <option value="frequency">Frequency (Never → Always)</option>
+                        </select>
+                        <span className="preset-hint">Selecting a preset will replace current options.</span>
+                      </div>
+                        {(question.options || []).map((option, optIndex) => {
+                          const optObj = typeof option === 'string' ? { label: option, points: ((question.options || []).length === 5 ? optIndex + 1 : 1) } : option;
                           return (
                             <div key={optIndex} className="option-edit">
                               <input
@@ -543,7 +537,6 @@ const FormEdit = ({ formId, onBack, onSave }) => {
                           Add Option
                         </button>
                       </div>
-                    )}
 
                     {/* All questions are required by default; no toggle shown */}
                   </div>
@@ -564,17 +557,7 @@ const FormEdit = ({ formId, onBack, onSave }) => {
                     </button>
                   </div>
                   <div className="modal-body">
-                    <div className="form-field">
-                      <label>Question Type</label>
-                      <select
-                        value={newQuestion.type}
-                        onChange={(e) => setNewQuestion(prev => ({ ...prev, type: e.target.value }))}
-                      >
-                        <option value="text">Text Input</option>
-                        <option value="rating">Rating Scale</option>
-                        <option value="multiple-choice">Multiple Choice</option>
-                      </select>
-                    </div>
+                    {/* Question type section removed in modal; rating scale by default */}
                     <div className="form-field">
                       <label>Question Text</label>
                       <textarea
@@ -584,19 +567,18 @@ const FormEdit = ({ formId, onBack, onSave }) => {
                         rows={2}
                       />
                     </div>
-                    {(newQuestion.type === 'rating' || newQuestion.type === 'multiple-choice') && (
-                      <div className="form-field">
-                        <label>Options</label>
-                        {newQuestion.options.map((option, index) => {
-                          const optObj = typeof option === 'string' ? { label: option, points: (newQuestion.options.length === 5 ? index + 1 : 1) } : option;
+                    <div className="form-field">
+                      <label>Rating Scale Options</label>
+                        {(newQuestion.options || []).map((option, index) => {
+                          const optObj = typeof option === 'string' ? { label: option, points: ((newQuestion.options || []).length === 5 ? index + 1 : 1) } : option;
                           return (
                             <div key={index} className="option-edit">
                               <input
                                 type="text"
                                 value={optObj.label}
                                 onChange={(e) => {
-                                  const newOptions = [...newQuestion.options];
-                                  const normalized = typeof newOptions[index] === 'string' ? { label: newOptions[index], points: (newQuestion.options.length === 5 ? index + 1 : 1) } : newOptions[index];
+                                  const newOptions = [...(newQuestion.options || [])];
+                                  const normalized = typeof newOptions[index] === 'string' ? { label: newOptions[index], points: ((newQuestion.options || []).length === 5 ? index + 1 : 1) } : newOptions[index];
                                   newOptions[index] = { ...normalized, label: e.target.value };
                                   setNewQuestion(prev => ({ ...prev, options: newOptions }));
                                 }}
@@ -606,8 +588,8 @@ const FormEdit = ({ formId, onBack, onSave }) => {
                                 className="option-points-select"
                                 value={optObj.points}
                                 onChange={(e) => {
-                                  const newOptions = [...newQuestion.options];
-                                  const normalized = typeof newOptions[index] === 'string' ? { label: newOptions[index], points: (newQuestion.options.length === 5 ? index + 1 : 1) } : newOptions[index];
+                                  const newOptions = [...(newQuestion.options || [])];
+                                  const normalized = typeof newOptions[index] === 'string' ? { label: newOptions[index], points: ((newQuestion.options || []).length === 5 ? index + 1 : 1) } : newOptions[index];
                                   const parsed = parseInt(e.target.value, 10) || 1;
                                   newOptions[index] = { ...normalized, points: Math.max(1, Math.min(5, parsed)) };
                                   setNewQuestion(prev => ({ ...prev, options: newOptions }));
@@ -623,7 +605,7 @@ const FormEdit = ({ formId, onBack, onSave }) => {
                               <button 
                                 className="remove-option-btn"
                                 onClick={() => {
-                                  const newOptions = newQuestion.options.filter((_, i) => i !== index);
+                                  const newOptions = (newQuestion.options || []).filter((_, i) => i !== index);
                                   setNewQuestion(prev => ({ ...prev, options: newOptions }));
                                 }}
                               >
@@ -634,13 +616,12 @@ const FormEdit = ({ formId, onBack, onSave }) => {
                         })}
                         <button 
                           className="add-option-btn"
-                          onClick={() => setNewQuestion(prev => ({ ...prev, options: [...prev.options, { label: '', points: 1 }] }))}
+                          onClick={() => setNewQuestion(prev => ({ ...prev, options: [...(prev.options || []), { label: '', points: 1 }] }))}
                         >
                           <FiPlus />
                           Add Option
                         </button>
                       </div>
-                    )}
                     {/* All questions are required; no toggle in modal */}
                   </div>
                   <div className="modal-actions">
@@ -665,50 +646,6 @@ const FormEdit = ({ formId, onBack, onSave }) => {
           </div>
         )}
 
-        {activeTab === 'settings' && (
-          <div className="settings-tab">
-            <div className="settings-card">
-              <h3>Form Settings</h3>
-              <div className="form-field">
-                <label>Response Collection</label>
-                <div className="radio-group">
-                  <label className="radio-label">
-                    <input type="radio" name="collection" value="anonymous" defaultChecked />
-                    <span className="radio-mark"></span>
-                    Anonymous responses
-                  </label>
-                  <label className="radio-label">
-                    <input type="radio" name="collection" value="identified" />
-                    <span className="radio-mark"></span>
-                    Identified responses
-                  </label>
-                </div>
-              </div>
-              <div className="form-field">
-                <label>Form Access</label>
-                <div className="radio-group">
-                  <label className="radio-label">
-                    <input type="radio" name="access" value="public" defaultChecked />
-                    <span className="radio-mark"></span>
-                    Public (anyone with link)
-                  </label>
-                  <label className="radio-label">
-                    <input type="radio" name="access" value="restricted" />
-                    <span className="radio-mark"></span>
-                    Restricted (specific users)
-                  </label>
-                </div>
-              </div>
-              <div className="form-field">
-                <label>Deadline (Optional)</label>
-                <input
-                  type="datetime-local"
-                  placeholder="Set form deadline"
-                />
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

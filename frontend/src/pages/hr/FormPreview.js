@@ -6,6 +6,7 @@ const FormPreview = ({ form, onClose, isModal = true }) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [responses, setResponses] = useState({});
   const [showResults, setShowResults] = useState(false);
+  const [previewMode, setPreviewMode] = useState('overview'); // 'overview', 'step-by-step', 'results'
 
   const handleResponseChange = (questionId, value) => {
     setResponses(prev => ({
@@ -18,7 +19,7 @@ const FormPreview = ({ form, onClose, isModal = true }) => {
     if (currentQuestion < form.questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
-      setShowResults(true);
+      setPreviewMode('results');
     }
   };
 
@@ -30,25 +31,13 @@ const FormPreview = ({ form, onClose, isModal = true }) => {
 
   const handleSubmit = () => {
     console.log('Form submitted with responses:', responses);
-    setShowResults(true);
+    setPreviewMode('results');
   };
 
   const renderQuestion = (question) => {
     const currentResponse = responses[question.id] || '';
 
     switch (question.type) {
-      case 'text':
-        return (
-          <div className="question-input">
-            <textarea
-              value={currentResponse}
-              onChange={(e) => handleResponseChange(question.id, e.target.value)}
-              placeholder="Enter your answer here..."
-              rows={4}
-            />
-          </div>
-        );
-
       case 'rating': {
         const normalized = question.options.map((opt, idx) =>
           typeof opt === 'string' ? { label: opt, points: (question.options.length === 5 ? idx + 1 : 1) } : opt
@@ -71,41 +60,78 @@ const FormPreview = ({ form, onClose, isModal = true }) => {
         );
       }
 
-      case 'multiple-choice': {
-        const normalized = question.options.map((opt, idx) =>
-          typeof opt === 'string' ? { label: opt, points: (question.options.length === 5 ? idx + 1 : 1) } : opt
-        );
-        const currentValues = currentResponse ? currentResponse.split(',') : [];
-        return (
-          <div className="multiple-choice-options">
-            {normalized.map((option, index) => (
-              <label key={index} className="choice-option">
-                <input
-                  type="checkbox"
-                  value={`${option.label}::${option.points}`}
-                  checked={currentValues.includes(`${option.label}::${option.points}`)}
-                  onChange={(e) => {
-                    const values = new Set(currentValues);
-                    const token = `${option.label}::${option.points}`;
-                    if (e.target.checked) {
-                      values.add(token);
-                    } else {
-                      values.delete(token);
-                    }
-                    handleResponseChange(question.id, Array.from(values).join(','));
-                  }}
-                />
-                <span className="choice-label">{option.label} ({option.points})</span>
-              </label>
-            ))}
-          </div>
-        );
-      }
 
       default:
         return <div>Unknown question type</div>;
     }
   };
+
+  const renderOverview = () => (
+    <div className="preview-overview">
+      <div className="overview-header">
+        <h3>Form Overview</h3>
+        <p>Preview how your form will appear to users</p>
+      </div>
+      
+      <div className="form-info-card">
+        <h4>{form.title}</h4>
+        <p className="form-description">{form.description}</p>
+        <div className="form-meta">
+          <span className="meta-item">
+            <strong>{form.questions.length}</strong> Questions
+          </span>
+          <span className="meta-item">
+            <strong>{form.category}</strong> Category
+          </span>
+          <span className="meta-item">
+            <strong>{form.status}</strong> Status
+          </span>
+        </div>
+      </div>
+
+      <div className="questions-preview">
+        <h4>Questions Preview</h4>
+        <div className="questions-list">
+          {form.questions.map((question, index) => (
+            <div key={question.id} className="question-preview-item">
+              <div className="question-number">Q{index + 1}</div>
+              <div className="question-content">
+                <h5>{question.question}</h5>
+                <div className="question-meta">
+                  <span className="question-type">{question.type}</span>
+                  {question.required && <span className="required-badge">Required</span>}
+                </div>
+                {question.options && (
+                  <div className="question-options-preview">
+                    {question.options.slice(0, 3).map((option, optIndex) => {
+                      const optObj = typeof option === 'string' ? { label: option } : option;
+                      return (
+                        <span key={optIndex} className="option-preview">
+                          {optObj.label}
+                        </span>
+                      );
+                    })}
+                    {question.options.length > 3 && (
+                      <span className="more-options">+{question.options.length - 3} more</span>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="overview-actions">
+        <button className="btn-secondary" onClick={() => setPreviewMode('step-by-step')}>
+          Start Step-by-Step Preview
+        </button>
+        <button className="btn-primary" onClick={onClose}>
+          Close Preview
+        </button>
+      </div>
+    </div>
+  );
 
   const renderResults = () => (
     <div className="preview-results">
@@ -120,8 +146,8 @@ const FormPreview = ({ form, onClose, isModal = true }) => {
         ))}
       </div>
       <div className="results-actions">
-        <button className="btn-secondary" onClick={() => setShowResults(false)}>
-          Edit Form
+        <button className="btn-secondary" onClick={() => setPreviewMode('step-by-step')}>
+          Preview Again
         </button>
         <button className="btn-primary" onClick={onClose}>
           Close Preview
@@ -141,7 +167,7 @@ const FormPreview = ({ form, onClose, isModal = true }) => {
     );
   }
 
-  if (showResults) {
+  if (previewMode === 'results' || showResults) {
     return (
       <div className="form-preview-container">
         {isModal && (
@@ -154,6 +180,24 @@ const FormPreview = ({ form, onClose, isModal = true }) => {
         )}
         <div className="preview-content">
           {renderResults()}
+        </div>
+      </div>
+    );
+  }
+
+  if (previewMode === 'overview') {
+    return (
+      <div className="form-preview-container">
+        {isModal && (
+          <div className="preview-header">
+            <h2>Form Preview - {form.title}</h2>
+            <button className="close-btn" onClick={onClose}>
+              <FiX />
+            </button>
+          </div>
+        )}
+        <div className="preview-content">
+          {renderOverview()}
         </div>
       </div>
     );
