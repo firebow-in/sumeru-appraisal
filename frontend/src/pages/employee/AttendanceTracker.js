@@ -449,7 +449,7 @@ const AttendanceTracker = () => {
                                 <td>{record.outTime}</td>
                                 <td>{record.duration}</td>
                                 <td style={{ color: record.status === 'Present' ? '#28a745' : '#dc3545' }}>
-                                  {record.status}
+                                  {record.status && record.status.toLowerCase() === 'present' ? 'Present' : record.status}
                                 </td>
                               </tr>
                             ))}

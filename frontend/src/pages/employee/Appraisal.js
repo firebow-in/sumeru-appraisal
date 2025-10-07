@@ -68,7 +68,7 @@ const Appraisal = () => {
       case 'pending':
         return 'Submit Self Review';
       case 'submitted':
-        return 'View';
+        return 'Submit Self Review';
       case 'reviewed':
         return 'View';
       default:
@@ -118,12 +118,22 @@ const Appraisal = () => {
                 <span className="status-reviewed">Reviewed by HR</span>
               )}
             </div>
-            <button
-              className={`form-action-btn ${getButtonClass(form.status)}`}
-              onClick={() => handleFormAction(form.id, form.status === 'pending' ? 'submit' : 'view')}
-            >
-              {getButtonText(form.status)}
-            </button>
+            {(() => {
+              const isJan2025 = form.month === 'January' && form.year === '2025';
+              const btnText = isJan2025 ? 'View' : getButtonText(form.status);
+              const btnClass = isJan2025 ? 'view-btn' : getButtonClass(form.status);
+              // If it's January 2025, always view. Otherwise, open form for pending or submitted.
+              const shouldSubmit = !isJan2025 && (form.status === 'pending' || form.status === 'submitted');
+              const action = shouldSubmit ? 'submit' : 'view';
+              return (
+                <button
+                  className={`form-action-btn ${btnClass}`}
+                  onClick={() => handleFormAction(form.id, action)}
+                >
+                  {btnText}
+                </button>
+              );
+            })()}
           </div>
         ))}
       </div>

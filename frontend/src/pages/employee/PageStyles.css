@@ -44,14 +44,7 @@
 .header-icons {
   display: flex;
   align-items: center;
-  gap: 15px;
-}
-
-/* Notification Center alignment in Insights header */
-.header-icons .notification-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  gap: 8px;
 }
 
 .icon {
@@ -67,10 +60,17 @@
   transition: background-color 0.2s;
 }
 
-/* Old bell icon styles removed - now using NotificationCenter component */
+.icon.bell {
+  background-color: #fbbf24;
+  color: #1f2937;
+}
 
 .icon:hover {
   background-color: #d1d5db;
+}
+
+.icon.bell:hover {
+  background-color: #f59e0b;
 }
 
 .icon.menu {
@@ -135,9 +135,9 @@
 .progress-ring.small {
   width: 70px;
   height: 70px;
-  position: absolute;
-  top: 20px;
-  right: 15px;
+  position: relative;
+  margin-left: auto;
+  margin-top: 10px;
 }
 
 .progress-text {
@@ -193,7 +193,7 @@
   text-align: left;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   position: relative;
   min-height: 120px;
 }
@@ -211,7 +211,7 @@
   margin: 0;
   line-height: 1.2;
   flex: 1;
-  padding-right: 40px;
+  padding-right: 50px;
 }
 
 /* Appraisal Review Section */
@@ -576,10 +576,11 @@
 /* Grid layout: All circles in a horizontal row */
 .scores-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  gap: 25px;
   justify-content: center;
-  align-items: center;
+  align-items: start;
   max-width: 600px;
   margin: 0 auto;
 }
@@ -615,6 +616,8 @@
   margin-bottom: 8px;
   width: 70px;
   height: 70px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Larger ring for Avg Review (2nd position) */
@@ -642,6 +645,73 @@
 /* Larger text for Avg Review (2nd position) */
 .score-card:nth-child(2) .score-text {
   font-size: 22px;
+}
+
+/* Combined Review Card (PM + CEO) */
+.score-card.combined-review {
+  width: 120px;
+  height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.review-pair {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.review-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.review-item .score-ring {
+  width: 70px;
+  height: 70px;
+  margin-bottom: 8px;
+}
+
+.review-item .score-text {
+  font-size: 18px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.review-item .score-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #1e40af;
+  text-align: center;
+}
+
+.review-item .score-ring {
+  width: 70px;
+  height: 70px;
+  margin-bottom: 8px;
+}
+
+.review-item .score-text {
+  font-size: 18px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.review-item .score-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #1e40af;
+  text-align: center;
 }
 
 /* Label below each ring - regular size */
@@ -787,7 +857,25 @@
   align-items: center;
 }
 
-/* Old notification icon styles removed - now using NotificationCenter component */
+.notification-icon {
+  width: 40px;
+  height: 40px;
+  background: #fbbf24;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.notification-icon:hover {
+  background: #f59e0b;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
 
 
 .appraisal-forms {

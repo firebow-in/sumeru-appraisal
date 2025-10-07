@@ -140,13 +140,14 @@
     top: 100%;
     right: 0;
     background: white;
-    border: 2px solid #8b5cf6;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 2px solid #9C27B0; /* Purple border as specified */
+    border-radius: 12px; /* Smooth rounded corners */
+    box-shadow: 0 8px 24px rgba(156, 39, 176, 0.15); /* Subtle shadow with purple tint */
     z-index: 1000;
-    min-width: 200px;
-    padding: 10px 0;
-    margin-top: 5px;
+    min-width: 180px;
+    padding: 8px;
+    margin-top: 8px;
+    overflow: hidden; /* Ensure no overflow */
   }
 
   .filter-title {
@@ -161,25 +162,34 @@
   .filter-option {
     width: 100%;
     background: white;
-    border: 2px solid #8b5cf6;
-    border-radius: 6px;
-    padding: 8px 12px;
-    margin: 3px 6px;
+    border: 2px solid #9C27B0; /* Consistent purple border */
+    border-radius: 8px; /* Smooth rounded corners */
+    padding: 12px 16px; /* Even padding for balance */
+    margin: 4px 0; /* Consistent spacing */
     font-size: 14px;
     font-weight: 500;
-    color: #1e3a8a;
+    color: #374151; /* Clean typography color */
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s ease; /* Smooth hover effects */
     text-align: left;
+    box-sizing: border-box; /* Prevent overflow */
+    position: relative;
+    overflow: hidden; /* Ensure no distortion */
   }
 
   .filter-option:hover {
-    background-color: #f3f4f6;
+    background-color: #f8fafc;
+    border-color: #7c3aed; /* Slightly darker purple on hover */
+    transform: translateY(-1px); /* Subtle lift effect */
+    box-shadow: 0 4px 12px rgba(156, 39, 176, 0.1);
   }
 
   .filter-option.active {
-    background-color: #fbbf24 !important;
-    border-color: #8b5cf6;
-    color: #1e3a8a;
+    background-color: #FFC107 !important; /* Soft yellow background */
+    border-color: #9C27B0 !important; /* Purple border maintained */
+    color: #1f2937 !important; /* Dark text for contrast */
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3); /* Subtle yellow shadow */
+    transform: translateY(-1px); /* Slight elevation */
   }
   

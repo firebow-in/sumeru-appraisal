@@ -1,26 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './RequestLeave.css';
-import FeedbackPopup from '../../components/FeedbackPopup';
 
 const RequestLeave = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    employeeName: '',
-    employeeId: '',
-    subject: '',
-    fromDate: '',
-    toDate: '',
-    duration: 'full',
-    coverPerson: '',
-    reason: '',
-    notifyPeers: true
+    fromDate: '2025-10-07',
+    toDate: '2025-10-07',
+    leaveType: 'Sick Leave - 2 days available',
+    durationType: 'custom', // 'full' or 'custom'
+    customDuration: 'First Half',
+    note: '',
+    notify: ''
   });
 
-  const [showFeedbackPopup, setShowFeedbackPopup] = useState(false);
-  const [feedbackData] = useState({
-    dateReceived: new Date().toISOString(),
-    authority: 'Manager',
-    feedback: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-  });
+  const [duration, setDuration] = useState(0.5);
+
+  // Calculate duration based on dates and duration type
+  useEffect(() => {
+    if (formData.fromDate && formData.toDate) {
+      const fromDate = new Date(formData.fromDate);
+      const toDate = new Date(formData.toDate);
+      const timeDiff = toDate.getTime() - fromDate.getTime();
+      const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
+      
+      if (formData.durationType === 'full') {
+        setDuration(daysDiff);
+      } else {
+        setDuration(daysDiff * 0.5);
+      }
+    }
+  }, [formData.fromDate, formData.toDate, formData.durationType]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -30,189 +40,171 @@ const RequestLeave = () => {
     }));
   };
 
+  const handleDurationTypeChange = (type) => {
+    setFormData(prev => ({
+      ...prev,
+      durationType: type
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Leave request submitted:', formData);
     alert('Leave request submitted successfully!');
+    navigate('/leave');
   };
 
   const handleCancel = () => {
-    console.log('Form cancelled');
-    alert('Form cancelled');
+    navigate('/leave');
   };
 
-  // const handleShowFeedback = () => {
-  //   console.log('Button clicked, opening feedback popup');
-  //   setShowFeedbackPopup(true);
-  // };
-
-  const handleCloseFeedback = () => {
-    console.log('Closing feedback popup');
-    setShowFeedbackPopup(false);
+  const handleClose = () => {
+    navigate('/leave');
   };
-
-  // Debug log to see state
-  console.log('showFeedbackPopup state:', showFeedbackPopup);
 
   return (
-    <div className="request-leave-container">
-      <div className="leave-form-container">
-        <div className="form-header">
-          <h2>Request Leave</h2>
-          </div>
-        
-        <form className="leave-form" onSubmit={handleSubmit}>
-          <div className="form-row">
-            <div className="form-group">
-              <label>Employee Name</label>
-              <div className="input-with-icon">
-                <input
-                  type="text"
-                  name="employeeName"
-                  value={formData.employeeName}
+    <div className="request-leave-page">
+      <div className="request-leave-container">
+        <div className="request-leave-header">
+          <h1>Request Leave</h1>
+        </div>
+
+        <form className="request-leave-form" onSubmit={handleSubmit}>
+          {/* Leave Dates and Duration */}
+          <div className="form-section">
+            <div className="date-duration-row">
+              <div className="date-field">
+                <label>From</label>
+                <input 
+                  type="date" 
+                  name="fromDate"
+                  value={formData.fromDate}
                   onChange={handleInputChange}
-                  placeholder="Enter employee name"
+                  className="date-input"
                 />
-             
-              </div>
-            </div>
-            <div className="form-group">
-              <label>Employee Id</label>
-              <div className="input-with-icon">
-                <input
-                  type="text"
-                  name="employeeId"
-                  value={formData.employeeId}
-                  onChange={handleInputChange}
-                  placeholder="Enter employee ID"
-                />
-              </div>
-            </div>
-          </div>
-
-         
-
-          <div className="form-group">
-            <label>Subject</label>
-            <input
-              type="text"
-              name="subject"
-              value={formData.subject}
-              onChange={handleInputChange}
-              placeholder="Enter subject"
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Duration</label>
-            <div className="duration-row">
-              <div className="date-inputs">
-                <div className="date-group">
-                  <label>From</label>
-                  <div className="input-with-icon">
-                    <input
-                      type="date"
-                      name="fromDate"
-                      value={formData.fromDate}
-                      onChange={handleInputChange}
-                    />
-                    <span className="input-icon">📅</span>
-                  </div>
-                </div>
-                <div className="date-group">
-                  <label>To</label>
-                  <div className="input-with-icon">
-                    <input
-                      type="date"
-                      name="toDate"
-                      value={formData.toDate}
-                      onChange={handleInputChange}
-                    />
-                    <span className="input-icon">📅</span>
-                  </div>
-                </div>
               </div>
               
-              <div className="duration-options">
-                <label className="radio-option">
-                  <input
-                    type="radio"
-                    name="duration"
-                    value="full"
-                    checked={formData.duration === 'full'}
-                    onChange={handleInputChange}
-                  />
-                  <span className="radio-label">Full day</span>
-                </label>
-                <label className="radio-option">
-                  <input
-                    type="radio"
-                    name="duration"
-                    value="half"
-                    checked={formData.duration === 'half'}
-                    onChange={handleInputChange}
-                  />
-                  <span className="radio-label">Half day</span>
-                </label>
+              <div className="duration-display">
+                <span className="duration-text">{duration} days</span>
+              </div>
+              
+              <div className="date-field">
+                <label>To</label>
+                <input 
+                  type="date" 
+                  name="toDate"
+                  value={formData.toDate}
+                  onChange={handleInputChange}
+                  className="date-input"
+                />
               </div>
             </div>
           </div>
 
-          <div className="form-group">
-            <label>Who will cover for u?</label>
-            <div className="input-with-icon">
-              <input
-                type="text"
-                name="coverPerson"
-                value={formData.coverPerson}
+          {/* Type of Leave */}
+          <div className="form-section">
+            <label className="section-label">Select type of leave you want to apply</label>
+            <div className="leave-type-dropdown">
+              <select 
+                name="leaveType" 
+                value={formData.leaveType}
                 onChange={handleInputChange}
-                placeholder="Select colleague"
-              />
-              <span className="input-icon">+</span>
+                className="leave-type-select"
+              >
+                <option value="Sick Leave - 2 days available">Sick Leave - 2 days available</option>
+                <option value="Casual Leave - 5 days available">Casual Leave - 5 days available</option>
+                <option value="Earned Leave - 10 days available">Earned Leave - 10 days available</option>
+                <option value="Comp Off Leave">Comp Off Leave</option>
+                <option value="Unpaid Leave">Unpaid Leave</option>
+              </select>
             </div>
           </div>
 
-          <div className="form-group">
-            <label>Duration (Reason for the leave)</label>
-            <textarea
-              name="reason"
-              value={formData.reason}
+          {/* Leave Duration Type */}
+          <div className="form-section">
+            <div className="duration-type-buttons">
+              <button 
+                type="button"
+                className={`duration-btn ${formData.durationType === 'full' ? 'active' : 'inactive'}`}
+                onClick={() => handleDurationTypeChange('full')}
+              >
+                Full day
+              </button>
+              <button 
+                type="button"
+                className={`duration-btn ${formData.durationType === 'custom' ? 'active' : 'inactive'}`}
+                onClick={() => handleDurationTypeChange('custom')}
+              >
+                Custom
+              </button>
+            </div>
+          </div>
+
+          {/* Custom Duration Details */}
+          {formData.durationType === 'custom' && (
+            <div className="form-section">
+              <label className="custom-duration-label">On {formData.fromDate ? new Date(formData.fromDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Select date'}</label>
+              <div className="custom-duration-dropdown">
+                <select 
+                  name="customDuration" 
+                  value={formData.customDuration}
+                  onChange={handleInputChange}
+                  className="custom-duration-select"
+                >
+                  <option value="First Half">First Half</option>
+                  <option value="Second Half">Second Half</option>
+                </select>
+              </div>
+            </div>
+          )}
+
+          {/* Leave Request Summary */}
+          <div className="form-section">
+            <div className="leave-summary">
+              <span className="summary-icon">⏰</span>
+              <span className="summary-text">
+                You are requesting for <strong>{duration} days</strong> of leave
+              </span>
+            </div>
+          </div>
+
+          {/* Note Field */}
+          <div className="form-section">
+            <label className="field-label">Note</label>
+            <textarea 
+              name="note"
+              value={formData.note}
               onChange={handleInputChange}
-              placeholder="Reason for the leave"
-              rows="4"
+              placeholder="Type here"
+              className="note-textarea"
+              rows="3"
             />
           </div>
 
+          {/* Notify Field */}
+          <div className="form-section">
+            <label className="field-label">Notify</label>
+            <input 
+              type="text"
+              name="notify"
+              value={formData.notify}
+              onChange={handleInputChange}
+              placeholder="Search employee"
+              className="notify-input"
+            />
+          </div>
+
+          {/* Action Buttons */}
           <div className="form-actions">
-            <div className="checkbox-group">
-              <label className="checkbox-option">
-                <input
-                  type="checkbox"
-                  name="notifyPeers"
-                  checked={formData.notifyPeers}
-                  onChange={handleInputChange}
-                />
-                <span className="checkbox-label">Notify Peers</span>
-              </label>
-            </div>
-            
-            <div className="button-group">
-              <button type="button" className="cancel-btn" onClick={handleCancel}>
-                Cancel
-              </button>
-              <button type="submit" className="submit-btn">
-                Submit
-              </button>
-            </div>
+            <button type="button" className="cancel-btn" onClick={handleCancel}>
+              Cancel
+            </button>
+            <button type="submit" className="request-btn">
+              Request
+            </button>
           </div>
         </form>
       </div>
-      
-      <FeedbackPopup 
-        isOpen={showFeedbackPopup}
-        onClose={handleCloseFeedback}
-        feedbackData={feedbackData}
-      />
     </div>
   );
 };

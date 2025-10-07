@@ -28,7 +28,7 @@ import ReceiveFeedback from './pages/employee/ReceiveFeedback';
 import HrDashboard from './pages/hr/HrDashboard';
 import PmDashboard from './pages/project-manager/PmDashboard';
 import CeoDashboard from './pages/ceo/CeoDashboard';
-import InternDashboard from './pages/intern/InternDashboard';
+// InternDashboard removed or not available
 
 function App() {
   return (
@@ -68,7 +68,7 @@ function App() {
           <Route path="/hr/dashboard" element={<HrDashboard />} />
           <Route path="/project-manager/dashboard" element={<PmDashboard />} />
           <Route path="/ceo/dashboard" element={<CeoDashboard />} />
-          <Route path="/intern/dashboard" element={<InternDashboard />} />
+          {/** Intern dashboard route disabled until component exists **/}
         </Routes>
       </Router>
     </div>

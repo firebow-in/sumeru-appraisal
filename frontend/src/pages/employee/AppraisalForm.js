@@ -17,6 +17,8 @@ const AppraisalForm = () => {
     goalAlignment: ''
   });
   const [formId, setFormId] = useState(null);
+  const [formMonth, setFormMonth] = useState('February');
+  const [formYear, setFormYear] = useState('2025');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
@@ -28,8 +30,12 @@ const AppraisalForm = () => {
     
     // Load existing form data if available
     const existingForm = getAppraisalForm(id);
-    if (existingForm && existingForm.formData) {
-      setFormData(existingForm.formData);
+    if (existingForm) {
+      if (existingForm.formData) {
+        setFormData(existingForm.formData);
+      }
+      if (existingForm.month) setFormMonth(existingForm.month);
+      if (existingForm.year) setFormYear(existingForm.year);
     }
   }, []);
 
@@ -92,7 +98,7 @@ const AppraisalForm = () => {
         </button>
       </div>
       <div className="appraisal-form-container">
-        <h1>Appraisal Form February- 2025</h1>
+        <h1>Appraisal Form {formMonth}- {formYear}</h1>
         <p className="form-instruction">provide your self-evaluation.</p>
         
         <form onSubmit={handleSubmit} className="appraisal-form">

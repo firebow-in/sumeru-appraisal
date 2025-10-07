@@ -392,26 +392,26 @@ const FormEdit = ({ formId, onBack, onSave }) => {
           </div>
         )}
         {/* Unified Details Section */}
-        <div className="details-tab">
-          <div className="form-details-card">
-            <h3>Form Information</h3>
-            <div className="form-field">
-              <label>Description</label>
-              <textarea
-                value={form.description}
-                onChange={(e) => handleFormChange('description', e.target.value)}
-                placeholder="Describe the purpose of this form..."
-                rows={4}
-              />
-            </div>
-            <div className="form-field">
-              <label>Author</label>
-              <input
-                type="text"
-                value={form.author}
-                onChange={(e) => handleFormChange('author', e.target.value)}
-                placeholder="Form author name"
-              />
+          <div className="details-tab">
+            <div className="form-details-card">
+              <h3>Form Information</h3>
+              <div className="form-field">
+                <label>Description</label>
+                <textarea
+                  value={form.description}
+                  onChange={(e) => handleFormChange('description', e.target.value)}
+                  placeholder="Describe the purpose of this form..."
+                  rows={4}
+                />
+              </div>
+              <div className="form-field">
+                <label>Author</label>
+                <input
+                  type="text"
+                  value={form.author}
+                  onChange={(e) => handleFormChange('author', e.target.value)}
+                  placeholder="Form author name"
+                />
             </div>
             <div className="form-info-note">
               <div className="info-icon">ℹ️</div>
@@ -423,7 +423,7 @@ const FormEdit = ({ formId, onBack, onSave }) => {
         </div>
 
         {/* Unified Questions Section */}
-        <div className="questions-tab">
+          <div className="questions-tab">
             <div className="questions-header">
               <h3>Form Questions</h3>
               <button 
@@ -480,24 +480,24 @@ const FormEdit = ({ formId, onBack, onSave }) => {
                       />
                     </div>
 
-                    <div className="question-options">
+                      <div className="question-options">
                       <label>Rating Scale Options:</label>
-                      <div className="preset-row">
-                        <select
-                          className="preset-select"
-                          defaultValue=""
-                          onChange={(e) => {
-                            const key = e.target.value;
-                            if (key) applyPresetToQuestion(question.id, key);
-                          }}
-                        >
-                          <option value="" disabled>Use preset…</option>
-                          <option value="appraisalFivePoint">Appraisal 5-point rating</option>
-                          <option value="likertFive">Likert 5-point</option>
-                          <option value="frequency">Frequency (Never → Always)</option>
-                        </select>
-                        <span className="preset-hint">Selecting a preset will replace current options.</span>
-                      </div>
+                        <div className="preset-row">
+                          <select
+                            className="preset-select"
+                            defaultValue=""
+                            onChange={(e) => {
+                              const key = e.target.value;
+                              if (key) applyPresetToQuestion(question.id, key);
+                            }}
+                          >
+                            <option value="" disabled>Use preset…</option>
+                            <option value="appraisalFivePoint">Appraisal 5-point rating</option>
+                            <option value="likertFive">Likert 5-point</option>
+                            <option value="frequency">Frequency (Never → Always)</option>
+                          </select>
+                          <span className="preset-hint">Selecting a preset will replace current options.</span>
+                        </div>
                         {(question.options || []).map((option, optIndex) => {
                           const optObj = typeof option === 'string' ? { label: option, points: ((question.options || []).length === 5 ? optIndex + 1 : 1) } : option;
                           return (
@@ -567,7 +567,7 @@ const FormEdit = ({ formId, onBack, onSave }) => {
                         rows={2}
                       />
                     </div>
-                    <div className="form-field">
+                      <div className="form-field">
                       <label>Rating Scale Options</label>
                         {(newQuestion.options || []).map((option, index) => {
                           const optObj = typeof option === 'string' ? { label: option, points: ((newQuestion.options || []).length === 5 ? index + 1 : 1) } : option;

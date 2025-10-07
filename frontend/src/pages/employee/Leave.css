@@ -1,0 +1,160 @@
+.leave-page {
+  padding: 20px;
+  background-color: #f8fafc;
+  min-height: 100vh;
+}
+
+.leave-header {
+  margin-bottom: 24px;
+}
+
+.leave-header h1 {
+  color: #1e3a8a;
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.leave-header p {
+  color: #6b7280;
+  font-size: 16px;
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.leave-content {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.leave-menu {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+}
+
+.leave-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 8px;
+  border: 1px solid transparent;
+}
+
+.leave-menu-item:hover {
+  background-color: #f8fafc;
+  border-color: #e5e7eb;
+}
+
+.leave-menu-item.active {
+  background-color: #fbbf24;
+  border-color: #f59e0b;
+  color: #1e3a8a;
+}
+
+.leave-menu-item.active .menu-item-content h3 {
+  color: #1e3a8a;
+  font-weight: 600;
+}
+
+.menu-item-icon {
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f3f4f6;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.leave-menu-item.active .menu-item-icon {
+  background-color: #1e3a8a;
+  color: white;
+}
+
+.menu-item-content {
+  flex: 1;
+}
+
+.menu-item-content h3 {
+  color: #374151;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0 0 4px 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.menu-item-content p {
+  color: #6b7280;
+  font-size: 14px;
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.leave-details {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  min-height: 500px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .leave-content {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .leave-menu {
+    order: 2;
+  }
+  
+  .leave-details {
+    order: 1;
+  }
+  
+  .leave-header h1 {
+    font-size: 24px;
+  }
+  
+  .leave-header p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .leave-page {
+    padding: 12px;
+  }
+  
+  .leave-menu {
+    padding: 16px;
+  }
+  
+  .leave-details {
+    padding: 16px;
+  }
+  
+  .leave-menu-item {
+    padding: 12px;
+  }
+  
+  .menu-item-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 20px;
+  }
+}

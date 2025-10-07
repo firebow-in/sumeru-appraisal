@@ -22,7 +22,7 @@ const Insights = () => {
         title: 'February 2025 Appraisal Review',
         score: 78,
         feedback: 'Good progress this month. Continue focusing on communication skills.',
-        goals: ['Improve presentation skills', 'Complete training modules', 'Increase productivity'],
+        goals: ['Improve resentation skills', 'Complete training modules', 'Increase productivity'],
         achievements: ['Completed advanced training', 'Improved team communication', 'Delivered 3 successful presentations']
       },
       'March': {
@@ -53,40 +53,38 @@ const Insights = () => {
         <div className="top-row">
           {/* Left Column - My Monthly Appraisal */}
           <div className="left-column">
-            <div className="appraisal-card">
-              <h2 className="card-title">My Monthly Appraisal</h2>
-              <div className="progress-container">
-                <div className="progress-ring large">
-                  <svg width="150" height="120" viewBox="0 0 140 140">
-                    <circle
-                      cx="70"
-                      cy="70"
-                      r="60"
-                      fill="none"
-                      stroke="#e5e7eb"
-                      strokeWidth="8"
-                    />
-                    <circle
-                      cx="70"
-                      cy="70"
-                      r="60"
-                      fill="none"
-                      stroke="url(#gradient1)"
-                      strokeWidth="8"
-                      strokeLinecap="round"
-                      strokeDasharray="377"
-                      strokeDashoffset="109"
-                      transform="rotate(-90 70 70)"
-                    />
-                    <defs>
-                      <linearGradient id="gradient1" x1="20%" y1="0%" x2="80%" y2="0%">
-                        <stop offset="0%" stopColor="#ffd700" />
-                        <stop offset="100%" stopColor="#4a90e2" />
-                      </linearGradient>
-                    </defs>
-                  </svg>
-                  <div className="progress-text">71%</div>
-                </div>
+            <h2 className="card-title">My Monthly Appraisal</h2>
+            <div className="progress-container">
+              <div className="progress-ring large">
+                <svg width="150" height="120" viewBox="0 0 140 140">
+                  <circle
+                    cx="70"
+                    cy="70"
+                    r="60"
+                    fill="none"
+                    stroke="#e5e7eb"
+                    strokeWidth="8"
+                  />
+                  <circle
+                    cx="70"
+                    cy="70"
+                    r="60"
+                    fill="none"
+                    stroke="url(#gradient1)"
+                    strokeWidth="8"
+                    strokeLinecap="round"
+                    strokeDasharray="377"
+                    strokeDashoffset="109"
+                    transform="rotate(-90 70 70)"
+                  />
+                  <defs>
+                    <linearGradient id="gradient1" x1="20%" y1="0%" x2="80%" y2="0%">
+                      <stop offset="0%" stopColor="#ffd700" />
+                      <stop offset="100%" stopColor="#4a90e2" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div className="progress-text">71%</div>
               </div>
             </div>
           </div>
@@ -364,73 +362,78 @@ const Insights = () => {
                 <div className="score-label">Avg Review</div>
               </div>
 
-              <div className="score-card">
-                <div className="score-ring">
-                  <svg width="70" height="70" viewBox="0 0 40 40">
-                    <circle
-                      cx="20"
-                      cy="20"
-                      r="16"
-                      fill="none"
-                      stroke="#e5e7eb"
-                      strokeWidth="3"
-                    />
-                    <circle
-                      cx="20"
-                      cy="20"
-                      r="16"
-                      fill="none"
-                      stroke="url(#gradient8)"
-                      strokeWidth="3"
-                      strokeLinecap="round"
-                      strokeDasharray="100"
-                      strokeDashoffset="40"
-                      transform="rotate(-90 20 20)"
-                    />
-                    <defs>
-                      <linearGradient id="gradient8" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#ffd700" />
-                        <stop offset="100%" stopColor="#4a90e2" />
-                      </linearGradient>
-                    </defs>
-                  </svg>
-                  <div className="score-text">3</div>
+              <div className="score-card combined-review">
+                <div className="review-pair">
+                  <div className="review-item">
+                    <div className="score-ring">
+                      <svg width="70" height="70" viewBox="0 0 40 40">
+                        <circle
+                          cx="20"
+                          cy="20"
+                          r="16"
+                          fill="none"
+                          stroke="#e5e7eb"
+                          strokeWidth="3"
+                        />
+                        <circle
+                          cx="20"
+                          cy="20"
+                          r="16"
+                          fill="none"
+                          stroke="url(#gradient8)"
+                          strokeWidth="3"
+                          strokeLinecap="round"
+                          strokeDasharray="100"
+                          strokeDashoffset="40"
+                          transform="rotate(-90 20 20)"
+                        />
+                        <defs>
+                          <linearGradient id="gradient8" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stopColor="#ffd700" />
+                            <stop offset="100%" stopColor="#4a90e2" />
+                          </linearGradient>
+                        </defs>
+                      </svg>
+                      <div className="score-text">3</div>
+                    </div>
+                    <div className="score-label">PM Review</div>
+                  </div>
+                  
+                  <div className="review-item">
+                    <div className="score-ring">
+                      <svg width="70" height="70" viewBox="0 0 40 40">
+                        <circle
+                          cx="20"
+                          cy="20"
+                          r="16"
+                          fill="none"
+                          stroke="#e5e7eb"
+                          strokeWidth="3"
+                        />
+                        <circle
+                          cx="20"
+                          cy="20"
+                          r="16"
+                          fill="none"
+                          stroke="url(#gradient9)"
+                          strokeWidth="3"
+                          strokeLinecap="round"
+                          strokeDasharray="100"
+                          strokeDashoffset="60"
+                          transform="rotate(-90 20 20)"
+                        />
+                        <defs>
+                          <linearGradient id="gradient9" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stopColor="#ffd700" />
+                            <stop offset="100%" stopColor="#4a90e2" />
+                          </linearGradient>
+                        </defs>
+                      </svg>
+                      <div className="score-text">2</div>
+                    </div>
+                    <div className="score-label">CEO Review</div>
+                  </div>
                 </div>
-                <div className="score-label">PM Review</div>
-                <div className="score-card">
-                <div className="score-ring">
-                  <svg width="70" height="70" viewBox="0 0 40 40">
-                    <circle
-                      cx="20"
-                      cy="20"
-                      r="16"
-                      fill="none"
-                      stroke="#e5e7eb"
-                      strokeWidth="3"
-                    />
-                    <circle
-                      cx="20"
-                      cy="20"
-                      r="16"
-                      fill="none"
-                      stroke="url(#gradient9)"
-                      strokeWidth="3"
-                      strokeLinecap="round"
-                      strokeDasharray="100"
-                      strokeDashoffset="60"
-                      transform="rotate(-90 20 20)"
-                    />
-                    <defs>
-                      <linearGradient id="gradient9" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#ffd700" />
-                        <stop offset="100%" stopColor="#4a90e2" />
-                      </linearGradient>
-                    </defs>
-                  </svg>
-                  <div className="score-text">2</div>
-                </div>
-                <div className="score-label">CEO Review</div>
-              </div>
               </div>
 
               
