@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './PageStyles.css';
-import ProfileDropdown from '../components/ProfileDropdown';
+import ProfileDropdown from '../../components/ProfileDropdown';
 
 const Insights = () => {
   const [selectedMonth, setSelectedMonth] = useState('January');

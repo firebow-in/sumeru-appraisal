@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './RequestLeave.css';
-import FeedbackPopup from '../components/FeedbackPopup';
+import FeedbackPopup from '../../components/FeedbackPopup';
 
 const RequestLeave = () => {
   const [formData, setFormData] = useState({
@@ -16,7 +16,7 @@ const RequestLeave = () => {
   });
 
   const [showFeedbackPopup, setShowFeedbackPopup] = useState(false);
-  const [feedbackData, setFeedbackData] = useState({
+  const [feedbackData] = useState({
     dateReceived: new Date().toISOString(),
     authority: 'Manager',
     feedback: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
@@ -41,10 +41,10 @@ const RequestLeave = () => {
     alert('Form cancelled');
   };
 
-  const handleShowFeedback = () => {
-    console.log('Button clicked, opening feedback popup');
-    setShowFeedbackPopup(true);
-  };
+  // const handleShowFeedback = () => {
+  //   console.log('Button clicked, opening feedback popup');
+  //   setShowFeedbackPopup(true);
+  // };
 
   const handleCloseFeedback = () => {
     console.log('Closing feedback popup');

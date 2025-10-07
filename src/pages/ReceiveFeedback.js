@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import FeedbackPopup from '../components/FeedbackPopup';
-import ProfileDropdown from '../components/ProfileDropdown';
+import FeedbackPopup from '../../components/FeedbackPopup';
+import ProfileDropdown from '../../components/ProfileDropdown';
 import "./FeedbackReceived.css";
 
 const FeedbackReceived = () => {

@@ -1,6 +1,6 @@
 import React from "react";
 import "./SendFeedback.css"; // import the CSS file
-import ProfileDropdown from '../components/ProfileDropdown';
+import ProfileDropdown from '../../components/ProfileDropdown';
 
 export default function SendFeedback() {
   return (

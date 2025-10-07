@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './PageStyles.css';
-import { getAppraisalForms, submitAppraisalForm } from '../utils/appraisalUtils';
-import ProfileDropdown from '../components/ProfileDropdown';
+import { getAppraisalForms, submitAppraisalForm } from '../../utils/appraisalUtils';
+import ProfileDropdown from '../../components/ProfileDropdown';
 
 const Appraisal = () => {
   const [appraisalForms, setAppraisalForms] = useState([]);

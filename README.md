@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -131,6 +132,8 @@ npm ci
 npm run build
 ```
 =======
+=======
+>>>>>>> 9844e3c045b81c4f30bd912c2b62748e50b0bf68
 # Sumeru Appraisal System
 
 A comprehensive employee appraisal management system built with Spring Boot backend and React frontend.
@@ -360,5 +363,9 @@ This project is licensed under the MIT License.
 
 ---
 
+<<<<<<< HEAD
 **Happy Coding! 🚀**
 >>>>>>> 9844e3c (Restructured frontend and backend, updated configs and styles)
+=======
+**Happy Coding! 🚀**
+>>>>>>> 9844e3c045b81c4f30bd912c2b62748e50b0bf68

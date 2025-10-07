@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './PageStyles.css';
-import { getAppraisalForm, submitAppraisalForm } from '../utils/appraisalUtils';
+import { getAppraisalForm, submitAppraisalForm } from '../../utils/appraisalUtils';
 
 const AppraisalForm = () => {
   const [formData, setFormData] = useState({

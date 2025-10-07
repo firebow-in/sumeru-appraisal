@@ -8,7 +8,7 @@ import {
   getTotalHoursWorkedToday,
   getTodaySessions,
   getYesterdayAttendance
-} from '../utils/attendanceUtils';
+} from '../../utils/attendanceUtils';
 
 const AttendanceTracker = () => {
   const [activeTab, setActiveTab] = useState('Today');

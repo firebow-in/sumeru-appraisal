@@ -1,6 +1,6 @@
 import React from 'react';
 import './PageStyles.css';
-import ProfileDropdown from '../components/ProfileDropdown';
+import ProfileDropdown from '../../components/ProfileDropdown';
 
 const Members = () => {
   const members = [

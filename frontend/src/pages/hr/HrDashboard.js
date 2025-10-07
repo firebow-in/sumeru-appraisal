@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
+=======
+import React from 'react';
+>>>>>>> 9844e3c045b81c4f30bd912c2b62748e50b0bf68
 import { 
   FiUsers, 
   FiUserPlus, 
@@ -7,6 +11,7 @@ import {
   FiEdit3,
   FiBell,
   FiCalendar,
+<<<<<<< HEAD
   FiChevronDown,
   FiX,
   FiSearch,
@@ -68,37 +73,63 @@ const HrDashboard = () => {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [filteredAttendanceData, setFilteredAttendanceData] = useState([]);
   // Sample attendance data with dates
+=======
+  FiChevronDown
+} from 'react-icons/fi';
+import './HrDashboard.css';
+
+const HrDashboard = () => {
+>>>>>>> 9844e3c045b81c4f30bd912c2b62748e50b0bf68
   const attendanceData = [
     {
       id: 1,
       name: 'Tejas P',
+<<<<<<< HEAD
       checkIns: ['09:00 AM', '01:30 PM', '02:00 PM'],
       checkOuts: ['01:00 PM', '02:00 PM', '06:00 PM'],
       totalHours: '9.5 hr',
       date: new Date('2024-01-15'),
       status: 'present'
+=======
+      checkIn: '09:00 AM',
+      checkOut: '06:00 PM',
+      status: 'completed'
+>>>>>>> 9844e3c045b81c4f30bd912c2b62748e50b0bf68
     },
     {
       id: 2,
       name: 'Manasi',
+<<<<<<< HEAD
       checkIns: ['10:30 AM', '01:30 PM', '02:30 AM'],
       checkOuts: ['01:00 PM', '02:00 PM', 'Pending'],
       totalHours: '3hr',
       date: new Date('2024-01-15'),
       status: 'present'
+=======
+      checkIn: '10:30 AM',
+      checkOut: 'Pending',
+      status: 'pending'
+>>>>>>> 9844e3c045b81c4f30bd912c2b62748e50b0bf68
     },
     {
       id: 3,
       name: 'Venkat',
+<<<<<<< HEAD
       checkIns: ['09:30 AM', '12:00 PM'],
       checkOuts: ['12:00 PM', '06:10 PM'],
       totalHours: '4.5hr',
       date: new Date('2024-01-15'),
       status: 'present'
+=======
+      checkIn: '09:30 AM',
+      checkOut: '06:10 PM',
+      status: 'completed'
+>>>>>>> 9844e3c045b81c4f30bd912c2b62748e50b0bf68
     },
     {
       id: 4,
       name: 'Nivetha',
+<<<<<<< HEAD
       checkIns: ['10:00 AM'],
       checkOuts: ['Pending'],
       totalHours: '0hr',
@@ -190,6 +221,30 @@ const HrDashboard = () => {
     { id: 4, name: 'Narendra Modi', reason: 'Work From Home', requestedTime: '—', type: 'correction' },
     { id: 5, name: 'Priya Nair', reason: 'Missed Punch', requestedTime: '—', type: 'correction' },
     { id: 6, name: 'Karthik R', reason: 'Incorrect Timing', requestedTime: '—', type: 'correction' }
+=======
+      checkIn: '10:00 AM',
+      checkOut: 'Pending',
+      status: 'pending'
+    }
+  ];
+
+  const leaveRequests = [
+    {
+      id: 1,
+      name: 'Mark Johnson',
+      reason: 'Sick',
+      type: 'leave'
+    }
+  ];
+
+  const attendanceCorrectionRequests = [
+    {
+      id: 1,
+      name: 'Rajesh Kumar',
+      reason: 'Forgot Checkout',
+      type: 'correction'
+    }
+>>>>>>> 9844e3c045b81c4f30bd912c2b62748e50b0bf68
   ];
 
   return (
@@ -201,6 +256,7 @@ const HrDashboard = () => {
         </div>
         
         <nav className="nav-menu">
+<<<<<<< HEAD
           <div 
             className={`nav-item ${currentView === 'dashboard' ? 'active' : ''}`}
             onClick={() => setCurrentView('dashboard')}
@@ -249,12 +305,38 @@ const HrDashboard = () => {
                 </div>
               </div>
             )}
+=======
+          <div className="nav-item active">
+            <FiUsers className="nav-icon" />
+            <span>Dashboard</span>
+          </div>
+          <div className="nav-item">
+            <FiUserPlus className="nav-icon" />
+            <span>Create User</span>
+          </div>
+          <div className="nav-item">
+            <FiUsers className="nav-icon" />
+            <span>Members</span>
+          </div>
+          <div className="nav-item">
+            <FiFileText className="nav-icon" />
+            <span>Appraisal</span>
+          </div>
+          <div className="nav-item">
+            <FiClipboard className="nav-icon" />
+            <span>Create Forms</span>
+          </div>
+          <div className="nav-item">
+            <FiFileText className="nav-icon" />
+            <span>Existing Forms</span>
+>>>>>>> 9844e3c045b81c4f30bd912c2b62748e50b0bf68
           </div>
         </nav>
       </div>
 
       {/* Main Content */}
       <div className="main-content">
+<<<<<<< HEAD
         {currentView === 'createUser' ? (
           <CreateUser onBack={() => setCurrentView('dashboard')} />
         ) : currentView === 'members' ? (
@@ -290,6 +372,24 @@ const HrDashboard = () => {
             </div>
 
             <div className="dashboard-grid">
+=======
+        {/* Header */}
+        <div className="dashboard-header">
+          <div className="header-content">
+            <h1>Good Morning, HR Name!</h1>
+            <div className="header-actions">
+              <div className="notification-bell">
+                <FiBell />
+              </div>
+              <div className="profile-image">
+                <img src="/api/placeholder/80/80" alt="Profile" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="dashboard-grid">
+>>>>>>> 9844e3c045b81c4f30bd912c2b62748e50b0bf68
           {/* Top Performer Card */}
           <div className="top-performer-card">
             <h3>Top Performer of the Month</h3>
@@ -304,12 +404,17 @@ const HrDashboard = () => {
             </div>
           </div>
 
+<<<<<<< HEAD
           {/* Attendance Overview - Full Height */}
+=======
+          {/* Attendance Overview */}
+>>>>>>> 9844e3c045b81c4f30bd912c2b62748e50b0bf68
           <div className="attendance-overview">
             <div className="section-header">
               <h3>Attendance Overview</h3>
             </div>
             
+<<<<<<< HEAD
             <div className="date-selector" onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}>
               <FiCalendar className="calendar-icon" />
               <span>{formatDateForDisplay(selectedDate)}</span>
@@ -446,6 +551,53 @@ const HrDashboard = () => {
 
           {/* Leave & Requests Section */}
           <div className="leave-requests-section" onClick={() => setIsLeaveModalOpen(true)}>
+=======
+            <div className="date-selector">
+              <FiCalendar className="calendar-icon" />
+              <span>Date</span>
+              <FiChevronDown className="dropdown-icon" />
+            </div>
+
+            <div className="attendance-list">
+              {attendanceData.map((employee) => (
+                <div key={employee.id} className="attendance-item">
+                  <div className="employee-avatar">
+                    <img src="/api/placeholder/60/60" alt={employee.name} />
+                  </div>
+                  <div className="employee-info">
+                    <h4>{employee.name}</h4>
+                    <div className="attendance-times">
+                      <div className="time-group">
+                        <div className="status-dot check-in"></div>
+                        <div className="time-info">
+                          <span className="time-label">Check In</span>
+                          <span className="time-value">{employee.checkIn}</span>
+                        </div>
+                      </div>
+                      <div className="time-group">
+                        <div className={`status-dot ${employee.status === 'pending' ? 'check-out-pending' : 'check-out'}`}></div>
+                        <div className="time-info">
+                          <span className="time-label">Check Out</span>
+                          <span className={`time-value ${employee.status === 'pending' ? 'pending' : ''}`}>
+                            {employee.checkOut}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="edit-icon">
+                    <FiEdit3 />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <button className="view-full-report-btn">View Full Report</button>
+          </div>
+
+          {/* Leave & Requests Section */}
+          <div className="leave-requests-section">
+>>>>>>> 9844e3c045b81c4f30bd912c2b62748e50b0bf68
             <h3>Leave & Requests</h3>
             
             {/* Who's Away Today */}
@@ -479,6 +631,7 @@ const HrDashboard = () => {
             </div>
           </div>
         </div>
+<<<<<<< HEAD
           </>
         )}
       </div>
@@ -633,6 +786,9 @@ const HrDashboard = () => {
           </div>
         </div>
       )}
+=======
+      </div>
+>>>>>>> 9844e3c045b81c4f30bd912c2b62748e50b0bf68
     </div>
   );
 };
